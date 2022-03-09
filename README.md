@@ -1,31 +1,36 @@
 # timescale
 
-OBJECTIVES
+## OBJECTIVES
 Obj. 1. Scale time according to a model defining the rate in function of variables given as time series (conditions)
+
 Obj. 2. Allow different number and naming of conditions
+
 Obj. 3. Allow different types of interpolation of conditions.
   Note: step function might cause problem on integration
+  
 Obj. 4. Allow back transformation into time
   Note: Inverse of rate does not exist when it reach zero
+  
 Obj. 5. Provide models for several examples of applications
   Note: Need to look into the litterature
+  
 Obj. 6. Particular case of finding the exact time (positive or negative) associated with a given physiological time
 
-PLAN
+## PLAN
 Focus on 1-2 with a case of interpolation and simple models as a test (1 then 2 variables)
 Broaden interpolations on 3 (constant, linear, splines).
 Look for a case of real models in various fields on (part of 5)
 More thourough completion of real models in 5
 
-EXAMPLES OF APPLICATIONS
+## EXAMPLES OF APPLICATIONS
  1. Conversion of time into degree days or other non-linear physiological or development time for ectotherms such as insects.
  2. Conversion of time into development time of fungi, depending on temperature and relative humidity
  3. Conversion of time into physiological time from summarized temperature (min, mean, max) or temperature
  4. Find the harvest time for a crop given a seedling date, or inversely find the seedling date to achieve harvest at the desired date.
 
 
-DATA TYPES
-x: time (numeric)
+## DATA TYPES
+x: time or scaled time (numeric)
 Model: function name representing an instantaneous rate at which time elapse in the new scale
 Conditions: data.frame containing a column called time, and other columns as variables
 
@@ -41,11 +46,12 @@ Solution.
   In interpolateModel, Check that the condition data.frame share the same variable name and also have    time as variable
 
 
-FUNCTIONS
+## FUNCTIONS
 several rateModelThermal (e.g. modelBriere1999)
   Start name with model
-  Variables. var = list(x,y)
-  Parameters. args = list(a = 1, b = 2)
+  Variables. x,y (directly calling them)
+  Parameters. param = list(a = 1, b = 2)
+  Options. if other options call them under options = list()
   Must be vectorized according to x, y
   Return an object of the same size as x and y, must be greater or equal to zero
 
@@ -53,7 +59,6 @@ compatibility(conditions, model)
   Access the variable name under var in the model,
   Check that the conditions data.frame share the same variable name
   Check conditions have time as variable
-
 
 interpolateCond(x, conditions, method)
   A function to interpolate conditions

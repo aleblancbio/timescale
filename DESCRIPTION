@@ -1,6 +1,6 @@
 Package: timescale
 Title: Time Scaling 
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: c(person("Alexandre", "Leblanc", role = c("aut", "cre"), email = "aleblanc.bio@gmail.com"))
 Description: Scale time according to a model defining the rate at which time elapse in the new scale in function of variables (conditions) given as time series. The package allows, but is not restricted to, the calculation of development time in ectotherms from temperature measurements, and allow for linear models (such as degree days) as well as non linear models. 
 License: GPL-3
