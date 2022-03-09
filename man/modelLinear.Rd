@@ -4,7 +4,7 @@
 \alias{modelLinear}
 \title{Linear rate model in function of temperature}
 \usage{
-modelLinear(temp, param = list(a, T0))
+modelLinear(temp, param = list(a, T0), options = list())
 }
 \arguments{
 \item{temp}{\code{numeric} vector of temperature (in celcius)}

@@ -7,7 +7,7 @@
 #' @examples
 #' modelLinear(temp = seq(0,30,2), param = list(a = 1, T0 = 10))
 #' 
-modelLinear <- function(temp, param = list(a, T0)){
+modelLinear <- function(temp, param = list(a, T0), options = list()){
   #Renaming parameters
   a <- param$a
   T0 <- param$T0
