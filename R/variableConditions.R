@@ -3,7 +3,7 @@
 #' @param conditions \code{data.frame} with \code{time} and variables as other columns.
 #' @return Return \code{character} vector made of the variable names.
 #' @export
-#' @example
+#' @examples
 #' conditions <- data.frame(time = seq(1,30,length.out = 10), temp = rnorm(10, 10, 5))
 #' variableConditions(conditions)
 setGeneric("variableConditions", function(conditions) standardGeneric("variableConditions"))

@@ -4,12 +4,14 @@
 \alias{modelLinear}
 \title{Linear rate model in function of temperature}
 \usage{
-modelLinear(temp, param = list(a, T0), options = list())
+modelLinear(temp, param = list(a, T0), control = list())
 }
 \arguments{
 \item{temp}{\code{numeric} vector of temperature (in celcius)}
 
 \item{param}{\code{list} of parameters named \code{T0}, the base temperature under which no development occurs, and \code{a} a normalizing factor such as development is completed at 1 (i.e. \code{a = 1/GDD}).}
+
+\item{control}{\code{list} of arguments that control the behaviour of the model; empty, kept for consistency with the general structure of rate models.}
 }
 \value{
 return a vector of rate associated to each element of \code{temp}.
