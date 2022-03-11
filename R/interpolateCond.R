@@ -2,7 +2,7 @@
 #' @description Interpolate variables of conditions
 #' @param conditions \code{data.frame} with columns named \code{time} and variables expected to correspond to those of the model.
 #' @param method \code{character} corresponding to the name of the interpolating method among. Available methods include \code{constant} or \code{linear}.
-#' @return Return a list of functions that interpolate variable according to time. Functions have only \code{v} as an argument which represent the time vector at which the function is to be interpolated. Elements of the list correspond to variable names.
+#' @return Return a list of functions that interpolate variable according to time. Functions have only \code{v} as an argument which represent the time vector at which the function is to be interpolated. The \code{names} attribute of the list correspond to the variable names.
 #' @details The function is a wrapper of \code{approxfun}.
 #' @export
 #' @examples

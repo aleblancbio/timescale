@@ -16,18 +16,27 @@ Obj. 5. Provide models for several examples of applications
   
 Obj. 6. Particular case of finding the exact time (positive or negative) associated with a given physiological time
 
+Obj. 7. Allow date as entries of timeScale
+
 ## PLAN
 Focus on 1-2 with a case of interpolation and simple models as a test (1 then 2 variables)
 Broaden interpolations on 3 (constant, linear, splines).
 Look for a case of real models in various fields on (part of 5)
+Backtransform in 4 and allow date as entries in 7
+Find particular time in 6
 More thourough completion of real models in 5
+
+## DETAILS TO IMPROVE
+- Look if we can allow function name and function for model and condModel in compoundModel funtion (and homogenize the use in the package)
+- In compoundModel and interpolateCond, change variable of interpolated functions from v to x or time.
+
 
 ## EXAMPLES OF APPLICATIONS
  1. Conversion of time into degree days or other non-linear physiological or development time for ectotherms such as insects.
- 2. Conversion of time into development time of fungi, depending on temperature and relative humidity
+ 2. Conversion of time into development time of fungi using temperature and relative humidity or precipitation;  plant growth with temperature and photoperiod or soil moisture.
  3. Conversion of time into physiological time from summarized temperature (min, mean, max) or temperature
  4. Find the harvest time for a crop given a seedling date, or inversely find the seedling date to achieve harvest at the desired date.
-
+ 5. More complex cases: Chain models for various stages, distribution over parameters or variables
 
 ## DATA TYPES
 x: time or scaled time (numeric)

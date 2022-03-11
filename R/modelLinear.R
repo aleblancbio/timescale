@@ -6,7 +6,7 @@
 #' @return return a vector of rate associated to each element of \code{temp}.
 #' @export
 #' @examples
-#' modelLinear(temp = seq(0,30,2), param = list(a = 1, T0 = 10))
+modelLinear(temp = seq(0,30,2), param = list(a = 1, T0 = 10))
 #' 
 modelLinear <- function(temp, param = list(a, T0), control = list()){
   #Renaming parameters
