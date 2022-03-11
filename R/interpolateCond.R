@@ -1,7 +1,7 @@
 #' @title Interpolate conditions
 #' @description Interpolate variables of conditions
 #' @param conditions \code{data.frame} with columns named \code{time} and variables expected to correspond to those of the model.
-#' @param method \code{character} corresponding to the name of the interpolating method among. Available methods include \code{constant} or \code{linear}.
+#' @param method \code{character} corresponding to the name of the interpolating method. Available methods include \code{constant} and \code{linear}.
 #' @return Return a list of functions that interpolate variable according to time. Functions have only \code{v} as an argument which represent the time vector at which the function is to be interpolated. The \code{names} attribute of the list correspond to the variable names.
 #' @details The function is a wrapper of \code{approxfun}.
 #' @export
@@ -18,12 +18,6 @@
 setGeneric("interpolateCond", function(conditions, method) standardGeneric("interpolateCond"))
 setMethod("interpolateCond", signature(conditions = "data.frame", method = "character"), function(conditions, method) {
 
-  #Ensure x is within time limit of conditions
-  logicalBeyondLimits <- any(x > max(conditions$time) | x < min(conditions$time))
-  if(logicalBeyondLimits){
-    stop("x cannot be interpolated beyond time range of conditions")
-  }
-  
   #Interpolation
   interpolatedCond <- list()
   if(method %in% c("constant","linear")){

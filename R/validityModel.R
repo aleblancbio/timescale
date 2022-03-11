@@ -6,7 +6,7 @@
 #' (1) code{time} is not a variable of the model;
 #' (2) the model has at least one variable.
 #' @export
-#' @example
+#' @examples
 #' validityModel(model = "modelLinear")
 #' 
 setGeneric("validityModel", function(model) standardGeneric("validityModel"))

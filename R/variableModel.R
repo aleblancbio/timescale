@@ -4,7 +4,7 @@
 #' @return Return \code{TRUE} if the conditions and models are compatibles and can be used to scale time, return an error otherwise.
 #' @details Variables in the model are all function inputs excluding \code{param} and \code{control}.
 #' @export
-#' @example
+#' @examples 
 #' variableModel(model = "modelLinear")
 #' 
 setGeneric("variableModel", function(model) standardGeneric("variableModel"))

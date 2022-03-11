@@ -20,3 +20,7 @@ Variables in the model are all function inputs excluding \code{param} and \code{
 (1) code{time} is not a variable of the model;
 (2) the model has at least one variable.
 }
+\examples{
+validityModel(model = "modelLinear")
+
+}

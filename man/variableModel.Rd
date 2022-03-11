@@ -18,3 +18,7 @@ Access variable from a rate model function.
 \details{
 Variables in the model are all function inputs excluding \code{param} and \code{control}.
 }
+\examples{
+variableModel(model = "modelLinear")
+
+}

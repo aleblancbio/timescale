@@ -9,10 +9,10 @@ interpolateCond(conditions, method)
 \arguments{
 \item{conditions}{\code{data.frame} with columns named \code{time} and variables expected to correspond to those of the model.}
 
-\item{method}{\code{character} corresponding to the name of the interpolating method among. Available methods include \code{constant} or \code{linear}.}
+\item{method}{\code{character} corresponding to the name of the interpolating method. Available methods include \code{constant} and \code{linear}.}
 }
 \value{
-Return a list of functions that interpolate variable according to time. Functions have only \code{v} as an argument which represent the time vector at which the function is to be interpolated. Elements of the list correspond to variable names.
+Return a list of functions that interpolate variable according to time. Functions have only \code{v} as an argument which represent the time vector at which the function is to be interpolated. The \code{names} attribute of the list correspond to the variable names.
 }
 \description{
 Interpolate variables of conditions

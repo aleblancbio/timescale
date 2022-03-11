@@ -29,7 +29,9 @@ More thourough completion of real models in 5
 ## DETAILS TO IMPROVE
 - Look if we can allow function name and function for model and condModel in compoundModel funtion (and homogenize the use in the package)
 - In compoundModel and interpolateCond, change variable of interpolated functions from v to x or time.
-
+- Add references in models
+- Ensure time is unique in conditions
+- Ensure time is within the range of conditions
 
 ## EXAMPLES OF APPLICATIONS
  1. Conversion of time into degree days or other non-linear physiological or development time for ectotherms such as insects.
