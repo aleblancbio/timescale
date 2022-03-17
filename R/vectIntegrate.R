@@ -17,7 +17,7 @@ vectIntegrate <- function(f, lower, upper, ...){
   }
   
   #Integrate between bounds, returning only its value
-  I <- vector("numeric",length = length(x1))
+  I <- vector("numeric",length = length(lower))
   for (i in seq_along(lower)){
     I[i] <- integrate(f, lower[i], upper[i], ...)$value
   }

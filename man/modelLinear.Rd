@@ -19,6 +19,9 @@ return a vector of rate associated to each element of \code{temp}.
 \description{
 Correspond to normalized growing degree day model, without daily approximation of temperature.
 }
+\details{
+The normalizing parameter should be set to one if the model returns units such as growing degree days.
+}
 \examples{
 modelLinear(temp = seq(0,30,2), param = list(a = 1, T0 = 10))
 

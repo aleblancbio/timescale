@@ -31,11 +31,15 @@ More thourough completion of real models in 5
 - In compoundModel and interpolateCond, change variable of interpolated functions from v to x or time.
 - Add references in models
 - Ensure time is unique in conditions
-- Ensure time is within the range of conditions
+- Ensure x1 and x2 of timseScale are within the range of conditions
+- Add tests
+- Add package description
+- Deal with number of subdivisions allowed in integration (return sometimes an error with the default value, but will lengthen the calculation if always increased). Same for rtol.
+- Deal with multiple solutions to uniroot when objective function is not strictly monotonous
 
 ## EXAMPLES OF APPLICATIONS
  1. Conversion of time into degree days or other non-linear physiological or development time for ectotherms such as insects.
- 2. Conversion of time into development time of fungi using temperature and relative humidity or precipitation;  plant growth with temperature and photoperiod or soil moisture.
+ 2. Conversion of time into development time of fungi using temperature and relative humidity or precipitation;  plant growth with temperature and photoperiod or soil moisture. Look at Hydrothermal time (HTT) models for seed germination.
  3. Conversion of time into physiological time from summarized temperature (min, mean, max) or temperature
  4. Find the harvest time for a crop given a seedling date, or inversely find the seedling date to achieve harvest at the desired date.
  5. More complex cases: Chain models for various stages, distribution over parameters or variables
