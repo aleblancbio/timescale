@@ -7,12 +7,12 @@
 #' @export
 #' @examples
 #' #Example of a call with two variables
-#' conditions <- data.frame(time = seq(1,30,length.out = 10), temp = rnorm(10, 10, 5), hr = rnorm(10, 10, 5))
+#' conditions <- data.frame(time = seq(0,30,length.out = 10), temp = rnorm(10, 10, 5), hr = rnorm(10, 10, 5))
 #' f <- interpolateCond(conditions, method = "linear")
 #' f
 #' #Plotting the result for temp 
 #' plot(conditions$time,conditions$temp)
-#' x <- seq(1,30,length.out = 100)
+#' x <- seq(0,30,length.out = 100)
 #' lines(x,f$temp(x), lty = 1)
 #' 
 setGeneric("interpolateCond", function(conditions, method) standardGeneric("interpolateCond"))

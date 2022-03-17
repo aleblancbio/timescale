@@ -6,7 +6,7 @@
 #' @details The check serve to ensure conditions can be represented through interpolation on \code{x}.
 #' @export
 #' @examples
-#' conditions <- data.frame(time = seq(1,30,length.out = 10), temp = rnorm(10, 10, 5))
+#' conditions <- data.frame(time = seq(0,30,length.out = 10), temp = rnorm(10, 10, 5))
 #' validityTime(x = 1:10,conditions)
 setGeneric("validityTime", function(x, conditions) standardGeneric("validityTime"))
 setMethod("validityTime", signature(x = "numeric", conditions = "data.frame"), function(x, conditions) {

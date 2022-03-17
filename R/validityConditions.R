@@ -9,35 +9,54 @@
 #' (3) variable names are the same in the model and conditions.
 #' @export
 #' @examples
-#' conditions <- data.frame(time = seq(1,30,length.out = 10), temp = rnorm(10, 10, 5))
+#' conditions <- data.frame(time = seq(0,30,length.out = 10), temp = rnorm(10, 10, 5))
 #' validityConditions(conditions, model = "modelLinear")
 setGeneric("validityConditions", function(conditions, model) standardGeneric("validityConditions"))
 setMethod("validityConditions", signature(conditions = "data.frame", model = "character"), function(conditions, model) {
-  #Access variable names of the model
+  #Restrtiction on variable names
+  ##Access variable names of the model
   varModel <- variableModel(model)
   
-  #Access variable names in conditions
+  ##Access variable names in conditions
   colConditions <- colnames(conditions)
   varConditions <- setdiff(colConditions,"time")
-  
-  #Restriction on conditions dataframe
-  ##Ensure time is present in conditions columns
+
+  ###Ensure time is present in conditions columns
   if(!("time" %in% colConditions)){
     stop("Conditions data.frame must have one column named time")
   }
-  ##Ensure param and control are excluded from conditions variables
+  ###Ensure param and control are excluded from conditions variables
   if(any(c("param", "control") %in% varConditions)){
     stop("Both param and control are reserved terms in models and should not be used in conditions")
   }
   
-  #Ensure equality between variable names
+  ##Ensure equality between variable names of conditions and the model
   if(length(setdiff(varModel , varConditions)) != 0){
     stop("Variable names of the model differ from column names of conditions")
   }
   
-  #Ensure time is strictly increasing and unique
-  #ADD
+  ##Restriction on conditions dataframe values
+  #Ensure time has no NA
+  if(any(is.na(conditions$time))){
+    stop("Conditions time cannot includes NA")
+  }
   
+  #Ensure time is unique
+  if(length(conditions$time) != length(unique(conditions$time))){
+    stop("Conditions time must have unique values")
+  }
+  
+  #Ensure time is strictly increasing and unique
+  logicalOrder <- all(order(conditions$time) == seq_len(length(conditions$time)))
+  if(!logicalOrder){
+    stop("Conditions time must be in an increasing order")
+  }
+  
+  #Ensure time encompasses zero
+  if(!(min(conditions$time) <= 0 & max(conditions$time) >= 0)){
+    stop("Conditions time must encompasses zero")
+  }
+
   return(TRUE)
 })
 
