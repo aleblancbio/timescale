@@ -27,15 +27,7 @@ Find particular time in 6
 More thourough completion of real models in 5
 
 ## DETAILS TO IMPROVE
-- Look if we can allow function name and function for model and condModel in compoundModel funtion (and homogenize the use in the package)
-- In compoundModel and interpolateCond, change variable of interpolated functions from v to x or time.
-- Add references in models
-- Ensure time is unique in conditions
-- Ensure x1 and x2 of timseScale are within the range of conditions
-- Add tests
-- Add package description
-- Deal with number of subdivisions allowed in integration (return sometimes an error with the default value, but will lengthen the calculation if always increased). Same for rtol.
-- Deal with multiple solutions to uniroot when objective function is not strictly monotonous
+Moved to GitHub issues.
 
 ## EXAMPLES OF APPLICATIONS
  1. Conversion of time into degree days or other non-linear physiological or development time for ectotherms such as insects.

@@ -11,7 +11,8 @@
 #' @details Note that \code{x1} and \code{x2} must be in the time range provided by conditions.
 #' @export
 #' @examples
-#' conditions <- data.frame(time = seq(1,50,length.out = 100), temp = rnorm(10, 10, 5))
+#' #Setting entries
+#' conditions <- data.frame(time = seq(0,50,length.out = 100), temp = rnorm(10, 10, 5))
 #' condModel <- interpolateCond(conditions, method = "linear")
 #' model <- "modelLinear"
 #' param = list(a = 1, T0 = 10)
@@ -21,11 +22,11 @@
 #' control = list()
 #' inverse = FALSE
 #' 
-#' x2 <- timeScaleAdd(x1, scaledPeriod = scaledPeriod, model = model, conditions = conditions, param = param, interpolation = "linear")
-#' calcPeriod <- timeScale(x1, x2, model = model, conditions = conditions, param = param, interpolation = "linear")
-#' calcPeriod-scaledPeriod
-setGeneric("timeScaleAdd", function(x1, scaledPeriod, model , conditions, param = list(), control = list(), interpolation = "linear") standardGeneric("timeScaleAdd"))
-setMethod("timeScaleAdd", signature(x1 = "numeric", scaledPeriod = "numeric", model = "character", conditions = "data.frame"), function(x1, scaledPeriod, model, conditions, param, control, interpolation) {
+#' #Calculating x2 time values
+#' x2 <- timeShift(x1, scaledPeriod = scaledPeriod, model = model, conditions = conditions, param = param, interpolation = "linear")
+#' x2
+setGeneric("timeShift", function(x1, scaledPeriod, model , conditions, param = list(), control = list(), interpolation = "linear") standardGeneric("timeShift"))
+setMethod("timeShift", signature(x1 = "numeric", scaledPeriod = "numeric", model = "character", conditions = "data.frame"), function(x1, scaledPeriod, model, conditions, param, control, interpolation) {
 
   #Validity checks on scaledPeriod range and length
   validityScaledPeriod(x1 = x1, scaledPeriod = scaledPeriod, model = model, conditions = conditions, param = param, interpolation = "linear")

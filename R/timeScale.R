@@ -42,8 +42,8 @@ setMethod("timeScale", signature(x1 = "numeric", x2 = "numeric", model = "charac
     #Inverse case
     ##For inverse we want x2-x1 (here as z) with y1 as reference, from y1 and y2 (here as x)
     z0 <- rep(0, length(x1))
-    z1 <- timeScaleAdd(z0, scaledPeriod = x1, model = model, conditions = conditions, param = param, interpolation = interpolation)
-    z2 <- timeScaleAdd(z0, scaledPeriod = x2, model = model, conditions = conditions, param = param, interpolation = interpolation)
+    z1 <- timeShift(z0, scaledPeriod = x1, model = model, conditions = conditions, param = param, interpolation = interpolation)
+    z2 <- timeShift(z0, scaledPeriod = x2, model = model, conditions = conditions, param = param, interpolation = interpolation)
     z <- z2 - z1
   }
   
