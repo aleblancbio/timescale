@@ -11,36 +11,41 @@
 #' @details Note that \code{x1} and \code{x2} must be in the time range provided by conditions.
 #' @export
 #' @examples
-#' conditions <- data.frame(time = seq(1,30,length.out = 10), temp = rnorm(10, 10, 5))
+#' conditions <- data.frame(time = seq(0,30,length.out = 10), temp = 20+rnorm(10, 10, 5))
 #' condModel <- interpolateCond(conditions, method = "linear")
 #' model <- "modelLinear"
 #' param = list(a = 1, T0 = 10)
-#' x1 = seq(1,10,length.out = 10)
-#' x2 = seq(10,20,length.out = 10)
-#' timeScale(x1, x2, model = model, conditions = conditions, param = param, interpolation = "linear")
-#'
+#' x1 = rep(0,10,length.out = 10)
+#' x2 = seq(11,20,length.out = 10)
+#' z2 <- timeScale(x1, x2, model = model, conditions = conditions, param = param, interpolation = "linear")
+#' z1 <- rep(0,10,length.out = 10)
+#' timeScale(z1, z2, model = model, conditions = conditions, param = param, interpolation = "linear", inverse = TRUE)
+
 setGeneric("timeScale", function(x1, x2, model , conditions, param = list(), control = list(), interpolation = "linear", inverse = FALSE) standardGeneric("timeScale"))
 setMethod("timeScale", signature(x1 = "numeric", x2 = "numeric", model = "character", conditions = "data.frame"), function(x1, x2, model, conditions, param, control, interpolation, inverse) {
   #Validity checks
   validityModel(model)
   validityConditions(conditions, model)
-  validityTime(x1, conditions)
-  validityTime(x2, conditions)
+ # validityTime(x1, conditions) #generalize for scaled time
+ # validityTime(x2, conditions)
   
   #Interpolation of conditions and composition with Model
   condModel <- interpolateCond(conditions, method = interpolation)
   compModel <- compoundModel(model, condModel, param = param, control = control)
   
-  #Direct case
-  ##Integration
-  xScaled <- vectIntegrate(f = compModel, lower = x1, upper = x2,  subdivisions=2000)
-
-  #Inverse case
-  if(inverse){
-    ##
-
-    
+  if(!inverse){
+    #Direct case
+    ##for direct we caclculate y2-y1 with x1 as reference, from x1 and x2
+    ##Integration
+    z <- vectIntegrate(f = compModel, lower = x1, upper = x2,  subdivisions=2000)
+  }else if(inverse){
+    #Inverse case
+    ##For inverse we want x2-x1 (here as z) with y1 as reference, from y1 and y2 (here as x)
+    z0 <- rep(0, length(x1))
+    z1 <- timeScaleAdd(z0, scaledPeriod = x1, model = model, conditions = conditions, param = param, interpolation = interpolation)
+    z2 <- timeScaleAdd(z0, scaledPeriod = x2, model = model, conditions = conditions, param = param, interpolation = interpolation)
+    z <- z2 - z1
   }
   
-  return(xScaled)
+  return(z)
 })

@@ -49,6 +49,7 @@ interpolation = "linear"
 control = list()
 inverse = FALSE
 
-timeScaleAdd(x1, scaledPeriod = scaledPeriod, model = model, conditions = conditions, param = param, interpolation = "linear")
-
+x2 <- timeScaleAdd(x1, scaledPeriod = scaledPeriod, model = model, conditions = conditions, param = param, interpolation = "linear")
+calcPeriod <- timeScale(x1, x2, model = model, conditions = conditions, param = param, interpolation = "linear")
+calcPeriod-scaledPeriod
 }

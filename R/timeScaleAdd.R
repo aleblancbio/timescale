@@ -21,8 +21,9 @@
 #' control = list()
 #' inverse = FALSE
 #' 
-#' timeScaleAdd(x1, scaledPeriod = scaledPeriod, model = model, conditions = conditions, param = param, interpolation = "linear")
-#'
+#' x2 <- timeScaleAdd(x1, scaledPeriod = scaledPeriod, model = model, conditions = conditions, param = param, interpolation = "linear")
+#' calcPeriod <- timeScale(x1, x2, model = model, conditions = conditions, param = param, interpolation = "linear")
+#' calcPeriod-scaledPeriod
 setGeneric("timeScaleAdd", function(x1, scaledPeriod, model , conditions, param = list(), control = list(), interpolation = "linear") standardGeneric("timeScaleAdd"))
 setMethod("timeScaleAdd", signature(x1 = "numeric", scaledPeriod = "numeric", model = "character", conditions = "data.frame"), function(x1, scaledPeriod, model, conditions, param, control, interpolation) {
 

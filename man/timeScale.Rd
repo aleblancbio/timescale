@@ -40,12 +40,13 @@ Evaluate the time elapsed between two bounds (x1, x2) into a scaled domain given
 Note that \code{x1} and \code{x2} must be in the time range provided by conditions.
 }
 \examples{
-conditions <- data.frame(time = seq(1,30,length.out = 10), temp = rnorm(10, 10, 5))
+conditions <- data.frame(time = seq(0,30,length.out = 10), temp = 20+rnorm(10, 10, 5))
 condModel <- interpolateCond(conditions, method = "linear")
 model <- "modelLinear"
 param = list(a = 1, T0 = 10)
-x1 = seq(1,10,length.out = 10)
+x1 = rep(0,10,length.out = 10)
 x2 = seq(10,20,length.out = 10)
-timeScale(x1, x2, model = model, conditions = conditions, param = param, interpolation = "linear")
-
+z2 <- timeScale(x1, x2, model = model, conditions = conditions, param = param, interpolation = "linear")
+z1 <- rep(0,10,length.out = 10)
+timeScale(z1, z2, model = model, conditions = conditions, param = param, interpolation = "linear", inverse = TRUE)
 }

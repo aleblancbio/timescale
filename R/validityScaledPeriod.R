@@ -29,11 +29,11 @@ setMethod("validityScaledPeriod", signature(x1 = "numeric", scaledPeriod = "nume
   ##Set min and max scaledPeriod
   x2Max <- rep(max(conditions$time), length(x1))
   x2Min <- rep(min(conditions$time), length(x1))
-  maxDelta <- timeScale(x1 = x1, x2 = x2Max, model = model, conditions = conditions, param = param, control = control, interpolation = interpolation, inverse = inverse)
-  minDelta <- timeScale(x1 = x1, x2 = x2Min, model = model, conditions = conditions, param = param, control = control, interpolation = interpolation, inverse = inverse)
+  maxDelta <- timeScale(x1 = x1, x2 = x2Max, model = model, conditions = conditions, param = param, control = control, interpolation = interpolation, inverse = FALSE)
+  minDelta <- timeScale(x1 = x1, x2 = x2Min, model = model, conditions = conditions, param = param, control = control, interpolation = interpolation, inverse = FALSE)
   
   ##Check validity
-  logicalPeriodValidity <- (scaledPeriod > minDelta) & (scaledPeriod < maxDelta)
+  logicalPeriodValidity <- (scaledPeriod >= minDelta) & (scaledPeriod <= maxDelta)
   if(!all(logicalPeriodValidity )){
     stop("scaledPeriod reached time outside conditions limits")
   }
