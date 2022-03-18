@@ -29,6 +29,8 @@ timeScale(
 \item{control}{\code{list} of arguments that control the behaviour of the model.}
 
 \item{interpolation}{\code{character} corresponding to the name of the interpolating method for conditions. Available methods include \code{constant} and \code{linear}.}
+
+\item{inverse}{\code{logical} indicating if the inverse operation (i.e. scaled time to time transformation) should be performed.}
 }
 \value{
 Return a vector of the same length as \code{x1} and \code{x2} representing the scaled time elapsed between those values.

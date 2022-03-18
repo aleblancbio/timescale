@@ -24,6 +24,6 @@ Variables in the model are all function inputs excluding \code{param} and \code{
 (3) variable names are the same in the model and conditions.
 }
 \examples{
-conditions <- data.frame(time = seq(1,30,length.out = 10), temp = rnorm(10, 10, 5))
+conditions <- data.frame(time = seq(0,30,length.out = 10), temp = rnorm(10, 10, 5))
 validityConditions(conditions, model = "modelLinear")
 }

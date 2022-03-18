@@ -1,4 +1,4 @@
-#' @title Time scale
+#' @title Time shift
 #' @description Evaluate the time elapsed between two bounds (x1, x2) into a scaled domain given a rate model and condtions that represent its variables.
 #' @param x1 \code{numeric} vector of initial time from which evaluate the scaling
 #' @param scaledPeriod \code{numeric} vector of period in the scaled domain to add to \code{x1}.

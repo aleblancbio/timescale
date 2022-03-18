@@ -22,7 +22,7 @@ Note that \code{condModel} must correspond to a list of functions and not of fun
 }
 \examples{
 #Example of a call with two variables
-conditions <- data.frame(time = seq(1,30,length.out = 10), temp = rnorm(10, 10, 5))
+conditions <- data.frame(time = seq(0,30,length.out = 10), temp = rnorm(10, 10, 5))
 condModel <- interpolateCond(conditions, method = "linear")
 model <- "modelLinear"
 param = list(a = 1, T0 = 10)

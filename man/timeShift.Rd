@@ -2,7 +2,7 @@
 % Please edit documentation in R/timeShift.R
 \name{timeShift}
 \alias{timeShift}
-\title{Time scale}
+\title{Time shift}
 \usage{
 timeShift(
   x1,
@@ -39,7 +39,8 @@ Evaluate the time elapsed between two bounds (x1, x2) into a scaled domain given
 Note that \code{x1} and \code{x2} must be in the time range provided by conditions.
 }
 \examples{
-conditions <- data.frame(time = seq(1,50,length.out = 100), temp = rnorm(10, 10, 5))
+#Setting entries
+conditions <- data.frame(time = seq(0,50,length.out = 100), temp = rnorm(10, 10, 5))
 condModel <- interpolateCond(conditions, method = "linear")
 model <- "modelLinear"
 param = list(a = 1, T0 = 10)
@@ -49,7 +50,7 @@ interpolation = "linear"
 control = list()
 inverse = FALSE
 
+#Calculating x2 time values
 x2 <- timeShift(x1, scaledPeriod = scaledPeriod, model = model, conditions = conditions, param = param, interpolation = "linear")
-calcPeriod <- timeScale(x1, x2, model = model, conditions = conditions, param = param, interpolation = "linear")
-calcPeriod-scaledPeriod
+x2
 }

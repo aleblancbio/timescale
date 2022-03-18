@@ -15,12 +15,12 @@ validityTime(x, conditions)
 Return \code{TRUE} if the condition is respected and an error otherwise.
 }
 \description{
-Check that a time vector (\code{x}), is included in the range of \code{conditions} time.
+Check that a time vector (\code{x}) is included in the range of \code{conditions} time.
 }
 \details{
 The check serve to ensure conditions can be represented through interpolation on \code{x}.
 }
 \examples{
-conditions <- data.frame(time = seq(1,30,length.out = 10), temp = rnorm(10, 10, 5))
+conditions <- data.frame(time = seq(0,30,length.out = 10), temp = rnorm(10, 10, 5))
 validityTime(x = 1:10,conditions)
 }

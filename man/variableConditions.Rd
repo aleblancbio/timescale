@@ -16,6 +16,6 @@ Return \code{character} vector made of the variable names.
 Access variable from conditions data.frame.
 }
 \examples{
-conditions <- data.frame(time = seq(1,30,length.out = 10), temp = rnorm(10, 10, 5))
+conditions <- data.frame(time = seq(0,30,length.out = 10), temp = rnorm(10, 10, 5))
 variableConditions(conditions)
 }

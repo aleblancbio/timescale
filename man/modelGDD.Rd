@@ -13,10 +13,10 @@ modelGDD(Tmin, Tmax, param = list(T0), control = list(method = 1))
 
 \item{param}{\code{list} of parameters named \code{T0}, the base temperature under which no development occurs.}
 
-\item{control}{\code{list} of arguments that control the behaviour of the model; \code{method} can be selected among \code{1} and \code{2} (see details).}
+\item{control}{\code{list} of arguments that control the behaviour of the model; for this function, \code{method} can be selected among \code{1} and \code{2} (see details).}
 }
 \value{
-return a vector of rate associated to each element of \code{temp}.
+Return a vector of rate associated to each element of \code{temp}.
 }
 \description{
 Growing degree day model based on daily approximation of temperature.
@@ -24,12 +24,12 @@ Growing degree day model based on daily approximation of temperature.
 \details{
 Two methods, described McMaster and Wilhelm (1997) can be chosen. Method 1 define GDD for one day as \code{(Tmax-Tmin)/2-T0} if greater than zero and zero otherwise; Method 2 define GDD for one day as \code{(Tmax-Tmin)/2-T0} after converting \code{Tmin} and \code{Tmax} into \code{T0} if they were smaller values.
 }
-\section{References}{
+\section{Reference}{
 
 McMaster GS, Wilhelm WW. 1997. Growing degree-days: one equation, two interpretations. Agricultural and Forest Meteorology. 87: 291-300. Available from: https://doi.org/10.1016/S0168-1923(97)00027-0.
 }
 
 \examples{
-modelGDD(Tmin = seq(0,20,2), Tmax = 5 + seq(0,20,2), param = list(T0 = 10), control = list(method = 2))
+modelGDD(Tmin = seq(0,20,2), Tmax = 5 + seq(0,20,2), param = list(T0 = 10), control = list(method = 1))
 
 }
