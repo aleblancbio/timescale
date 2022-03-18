@@ -51,4 +51,5 @@ x2 = seq(11,20,length.out = 10)
 z2 <- timeScale(x1, x2, model = model, conditions = conditions, param = param, interpolation = "linear")
 z1 <- rep(0,10,length.out = 10)
 timeScale(z1, z2, model = model, conditions = conditions, param = param, interpolation = "linear", inverse = TRUE)
+
 }

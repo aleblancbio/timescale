@@ -41,14 +41,14 @@ setMethod("timeScale", signature(x1 = "numeric", x2 = "numeric", model = "charac
   
   if(inverse){
     #Inverse case
-    ##For inverse we want x2-x1 (here as z) with y1 as reference, from y1 and y2 (here as x)
+    ##Calculate time2-time1 (here as z2-z1) with scaled time x1 as reference, from scaled time x1 and x2
     z0 <- rep(0, length(x1))
     z1 <- timeShift(z0, scaledPeriod = x1, model = model, conditions = conditions, param = param, interpolation = interpolation)
     z2 <- timeShift(z0, scaledPeriod = x2, model = model, conditions = conditions, param = param, interpolation = interpolation)
     z <- z2 - z1
   }else{
     #Direct case
-    ##for direct we caclculate y2-y1 with x1 as reference, from x1 and x2
+    ##Caclculate scaled time z2-z1 with time x1 as reference, from time x1 and x2
     ##Integration
     z <- vectIntegrate(f = compModel, lower = x1, upper = x2,  subdivisions=2000)
   }
