@@ -35,9 +35,9 @@ setMethod("timeScale", signature(x1 = "numeric", x2 = "numeric", model = "charac
     validityTime(x2, conditions)
   }
 
-  #Interpolation of conditions and composition with Model
+  #Interpolation of conditions and composition with the model
   condModel <- interpolateCond(conditions, method = interpolation)
-  compModel <- compoundModel(model, condModel, param = param, control = control)
+  compModel <- composeModel(model, condModel, param = param, control = control)
   
   if(inverse){
     #Inverse case

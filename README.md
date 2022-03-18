@@ -1,5 +1,39 @@
 # timescale
 
+## Package Installation
+devtools::install_github("aleblancbio/timescale") using devtools
+
+## DESCRIPTION
+timeScale and timeShift are
+
+Advantage of the approach
+
+Potential application. Underline those
+
+The package is still improving. More models, examples and documentation will be added in the future.
+
+## STRUCTURE OF THE PACKAGE
+model and conditions as entries.
+model def: rate model (hereafter model), model variables
+conditions def:
+
+
+timeScale. 
+1. Checks are performed through functions which name start by validity.
+  validityModel. 
+  validityConditions ensure conditions respects some constraints, but mostly     ensure time is present, as well as the model variables.
+
+2. conditions variables are interpolated using interpolateCond, which return a function
+
+3. composeModel pass the interpolation of conditions variables into the model. The resulting function is only expressed as time
+
+4. Integration of the composite function between specified bounds (time)
+
+5. For the inverse operation, models usually can return zero values and the rate therfore cannot be inverted before integration. The approach preconised is to estimate time difference (from zero) for a defined period corresponding to bounds of scaled time. This operation is accomplished by timeShift.
+
+6. timeShift idea is to find at which time, the time elapsed in the scaled domain (calculated by the function timeScale) would reach a defined period (scaledPeriod). This can be accomplish by finding the root of the timeScale function minus the objective scalePeriod.
+
+
 ## OBJECTIVES
 Obj. 1. Scale time according to a model defining the rate in function of variables given as time series (conditions)
 
@@ -27,7 +61,7 @@ Find particular time in 6
 More thourough completion of real models in 5
 
 ## DETAILS TO IMPROVE
-Moved to GitHub issues.
+See GitHub issues section for details.
 
 ## EXAMPLES OF APPLICATIONS
  1. Conversion of time into degree days or other non-linear physiological or development time for ectotherms such as insects.
@@ -36,58 +70,5 @@ Moved to GitHub issues.
  4. Find the harvest time for a crop given a seedling date, or inversely find the seedling date to achieve harvest at the desired date.
  5. More complex cases: Chain models for various stages, distribution over parameters or variables
 
-## DATA TYPES
-x: time or scaled time (numeric)
-Model: function name representing an instantaneous rate at which time elapse in the new scale
-Conditions: data.frame containing a column called time, and other columns as variables
-
-Problem:
-  variable name in the model must correspond to those in the object condition
-  variable name in the model must be ditinguished from parameters and time
-  The number and name of the variables and parameter can change between models
-  Avoid unecessary structure as in S4 or R6
-
-Solution.
-  Use var = list('x','y') and param = list('a', 'b') in the model
-  Access the variable name under var in the model,
-  In interpolateModel, Check that the condition data.frame share the same variable name and also have    time as variable
-
-
-## FUNCTIONS
-several rateModelThermal (e.g. modelBriere1999)
-  Start name with model
-  Variables. x,y (directly calling them)
-  Parameters. param = list(a = 1, b = 2)
-  Options. if other options call them under options = list()
-  Must be vectorized according to x, y
-  Return an object of the same size as x and y, must be greater or equal to zero
-
-compatibility(conditions, model)
-  Access the variable name under var in the model,
-  Check that the conditions data.frame share the same variable name
-  Check conditions have time as variable
-
-interpolateCond(x, conditions, method)
-  A function to interpolate conditions
-  Act as a function of x (return an object with same number of columns as conditions, but the same length as x)
-
-compoundModel(rateModel,condModel)
-  take function name as entries
-  A function that represent realized rate (compound of conditions and the model)
-  return rateModelTemporal
-
-timeScaleDirect(time, compoundModel)
-  A function to integrate realized rate function and evaluate at specified time
-  Returning only a vector of the same size as time
-
-timeScaleInverse(time, compoundModel)
-  A function to provide the inverse relation of integration (later)
-  Identify domain on which the model is zero
-
-timeScale(time, conditions, model, interpolation, parameters)
-  Wrapper function to encompass interpolation, composition as well as integration (direct or inverse)
-  Ensure proper data flux and error handling
-  time (numeric)
-  conditions
 
 
