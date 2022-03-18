@@ -2,6 +2,7 @@
 
 export(compoundModel)
 export(interpolateCond)
+export(modelGDD)
 export(modelLinear)
 export(timeScale)
 export(timeShift)
