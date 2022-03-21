@@ -19,8 +19,8 @@
 setGeneric("validityScaledTime", function(x, model , conditions, param = list(), control = list(), interpolation = "linear") standardGeneric("validityScaledTime"))
 setMethod("validityScaledTime", signature(x = "numeric", model = "character", conditions = "data.frame"), function(x, model, conditions, param, control, interpolation) {
     #Simply refers to the equivalent function for period
-    x1 = rep(0, length(scaledPeriod))
-    validityScaledPeriod(x1, scaledPeriod, model = model, conditions = conditions, param = param, interpolation = "linear")
+    x1 = rep(0, length(x))
+    validityScaledPeriod(x1, scaledPeriod = x, model = model, conditions = conditions, param = param, interpolation = "linear")
   return(TRUE)
 })
 
