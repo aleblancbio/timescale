@@ -22,7 +22,7 @@ setMethod("composeModel", signature(model = "character", condModel = "list"), fu
   ##Check variable names
   var <- variableModel(model)
   condVar <- names(condModel)
-  if(!all(sapply(condModel, class) == "function")){
+  if(!all(var %in% condVar)){
     stop("Names of condModel elements  differ from model variable names")
   }
   
