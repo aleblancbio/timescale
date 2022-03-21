@@ -52,7 +52,7 @@ setMethod("timeScale", signature(x1 = "numeric", x2 = "numeric", model = "charac
     #Direct case
     ##Caclculate scaled time z2-z1 with time x1 as reference, from time x1 and x2
     ##Integration
-    z <- vectIntegrate(f = compModel, lower = x1, upper = x2,  subdivisions=2000)
+    z <- vectIntegrate(f = compModel, lower = x1, upper = x2,  subdivisions = 2000)
   }
 
   return(z)
