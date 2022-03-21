@@ -8,7 +8,7 @@
 #' @param control \code{list} of arguments that control the behaviour of the model.
 #' @param interpolation \code{character} corresponding to the name of the interpolating method for conditions. Available methods include \code{constant} and \code{linear}.
 #' @return Return a vector of the same length as \code{x1} and \code{x2} representing the scaled time elapsed between those values.
-#' @details Note that \code{x1} and \code{x2} must be in the time range provided by conditions.
+#' @details Note that \code{x1} and the calculated \code{x2} must be in the time range provided by conditions. See the details section of \code{timescale} for the structure of \code{conditions} and \code{model}.
 #' @export
 #' @examples
 #' #Setting entries

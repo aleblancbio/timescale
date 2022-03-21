@@ -20,9 +20,9 @@ timeScale(
 
 \item{x2}{\code{numeric} vector of final time until which evaluate the scaling}
 
-\item{model}{\code{character} corresponding to the name of the rate model.}
+\item{model}{\code{character} corresponding to the name of the rate model (see the details section).}
 
-\item{conditions}{\code{data.frame} with columns named \code{time} and variables expected to correspond to those of the model.}
+\item{conditions}{\code{data.frame} with columns named \code{time} and variables expected to correspond to those of the model (see the details section).}
 
 \item{param}{\code{list} parameters of the model.}
 
@@ -39,10 +39,12 @@ Return a vector of the same length as \code{x1} and \code{x2} representing the s
 Evaluate the time elapsed between two bounds (x1, x2) into a scaled domain given a rate model and condtions that represent its variables.
 }
 \details{
-Note that \code{x1} and \code{x2} must be in the time range provided by conditions.
+Note that \code{x1} and \code{x2} must be in the time range provided by conditions. \cr \cr
+\code{model} is a function defined by the user that return the rate at which time elapse in the new scale. It takes variables, model parameters (\code{param} as a \code{list}) and optional arguments (under a \code{list} named \code{control}). All arguments of the model that is not either \code{param} or \code{control} are considered variables; therefore, any number of variables and any name can be chosen, with the exception of the word \code{time}). The model should accept numeric vectors of the same length as variable and return a value greater or equal to zero. Some models are already included in the package and can serve as template (\code{modelGDD}, \code{modelLinear}, \code{modelBriere1999}). \cr \cr
+\code{conditions} is a \code{data.frame} that contains one column named \code{time} and other columns with the same name as the model variables. It represents the evolution of the model variable through time. Checks are made when calling \code{timeScale} and \code{timeShift} to ensure \code{conditions} and the \code{model} are compatible. Other checks are made on \code{conditions}, including \code{time} must be a strictly increasing \code{numeric} containing \code{0}. Units of times must simply match the definition of the model, but day is a good choice. \cr \cr
 }
 \examples{
-conditions <- data.frame(time = seq(0,30,length.out = 10), temp = 20+rnorm(10, 10, 5))
+conditions <- data.frame(time = seq(0,30,length.out = 10), temp = 20 + rnorm(10, 10, 5))
 condModel <- interpolateCond(conditions, method = "linear")
 model <- "modelLinear"
 param = list(a = 1, T0 = 10)
