@@ -45,10 +45,9 @@ Note that \code{x1} and \code{x2} must be in the time range provided by conditio
 }
 \examples{
 conditions <- data.frame(time = seq(0,30,length.out = 10), temp = 20 + rnorm(10, 10, 5))
-condModel <- interpolateCond(conditions, method = "linear")
 model <- "modelLinear"
 param = list(a = 1, T0 = 10)
-x1 = rep(0,10,length.out = 10)
+x1 = rep(0,10)
 x2 = seq(11,20,length.out = 10)
 z2 <- timeScale(x1, x2, model = model, conditions = conditions, param = param, interpolation = "linear")
 z1 <- rep(0,10,length.out = 10)

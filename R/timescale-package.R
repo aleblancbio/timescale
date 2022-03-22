@@ -10,7 +10,7 @@
 #' The package can be installed from github by entering the following command lines in R: 
 #' \code{devtools::install_github("aleblancbio/timescale", build_vignettes = TRUE)}.
 #' \cr\cr
-#' An overview of the package can be accessed through: \code{vignette('Overview', package = 'timescale')}. 
+#' An overview of the package can be accessed through: \code{browseVignettes('timescale')}. 
 #' To get information on a specific function, one can use ? or the help() function in R.
 #' \cr\cr
 "_PACKAGE"

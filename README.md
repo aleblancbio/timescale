@@ -11,7 +11,6 @@ install_github("aleblancbio/timescale", build_vignettes = TRUE)
 This file give an overview of the package and is available from main folder of the GitHub project. The information has also been replicated as a vignette, to be available once the package is installed. The vignette can be accessed through the following command lines:
 
 ```
-vignette('Overview', package = 'timescale')
 browseVignettes("timescale")
 ```
 
