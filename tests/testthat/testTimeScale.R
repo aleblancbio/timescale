@@ -57,3 +57,21 @@ test_that("timeScale example with modelGDD", {
   #Equality given some rounding
   expect_equal(y2, answer, tolerance=1e-3)
 })
+
+test_that("timeScale can integrate on medium oscillating dataset", {
+  
+  time <- seq(0, 10, by = 1/24)
+  temp <- rnorm(length(time), mean = 5, sd = 0.5)*sin(2*pi*time) + 10
+  conditions <- data.frame(time = time, temp = temp)
+  model <- "modelLinear"
+  param <- list(T0 = 10, a = 1)
+  x1 = rep(0,length.out = 10)
+  x2 = seq(1,10,length.out = 10)
+  z2 <- timeScale(x1, x2, model = model, conditions = conditions, param = param, interpolation = "linear")
+  
+  z1 <- rep(0,10,length.out = 10)
+  x2Calc <- timeScale(z1, z2, model = model, conditions = conditions, param = param, interpolation = "linear", inverse = TRUE)
+  x2Calc
+  
+  expect_error(timeScale(x1, x2, model = model, conditions = conditions, param = param, interpolation = "linear"), NA)
+})

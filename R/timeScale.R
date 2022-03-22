@@ -51,7 +51,7 @@ setMethod("timeScale", signature(x1 = "numeric", x2 = "numeric", model = "charac
     #Direct case
     ##Caclculate scaled time z2-z1 with time x1 as reference, from time x1 and x2
     ##Integration
-    z <- vectIntegrate(f = compModel, lower = x1, upper = x2,  subdivisions = 100000)
+    z <- vectIntegral(f = compModel, xmin = x1, xmax = x2, method = "Kronrod")
   }
 
   return(z)

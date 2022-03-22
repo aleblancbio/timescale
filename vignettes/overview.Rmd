@@ -70,7 +70,7 @@ library(timescale)
 library(ggplot2)
 
 time <- seq(0, 10, by = 1/24)
-temp <- rnorm(length(time), mean = 1, sd = 0.5)*sin(2*pi*time) + 10
+temp <- rnorm(length(time), mean = 5, sd = 2.5)*sin(2*pi*time) + 10
 conditions <- data.frame(time = time, temp = temp)
 
 
@@ -100,7 +100,7 @@ param <- list(T0 = 10, a = 1)
 ### Function timeScale
 We then use the `timeScale` function to compute the development (`z2`) between a reference 'x1' and some other time 'x2' (it doesn't have to be time in `conditions`. Because `timeScale` use a representation of temperature in \code{conditions}, we must specify how it must be interpolated (here we chose 'linear' interpolation).
 
-```
+```{r}
 x1 = rep(0,length.out = 10)
 x2 = seq(1,10,length.out = 10)
 z2 <- timeScale(x1, x2, model = model, conditions = conditions, param = param, interpolation = "linear")
@@ -108,7 +108,7 @@ z2
 ```
 
 For the inverse operation, we simply have to use the option `inverse = TRUE` and specify entries as development instead of time. For this example, we would calculate `z2` back into `x2` using zero as a reference for `z1` (since `x1` and `z1` both coincide at zero)
-```
+```{r}
 z1 <- rep(0,10,length.out = 10)
 x2Calc <- timeScale(z1, z2, model = model, conditions = conditions, param = param, interpolation = "linear", inverse = TRUE)
 x2Calc

@@ -10,6 +10,8 @@
 #' f <- function(x) (x)
 #' lower <- seq(1,10,length.out = 10)
 #' upper <- seq(11,20,length.out = 10)
+#' vectIntegrate(f, lower, upper)
+#' 
 vectIntegrate <- function(f, lower, upper, ...){
   #Check length of vectors
   if(length(lower)!=length(upper)){

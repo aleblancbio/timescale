@@ -25,4 +25,6 @@ Extend the integrate function from \code{stats} by accepting vector for the limi
 f <- function(x) (x)
 lower <- seq(1,10,length.out = 10)
 upper <- seq(11,20,length.out = 10)
+vectIntegrate(f, lower, upper)
+
 }
