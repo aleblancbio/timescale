@@ -17,7 +17,6 @@
 #' 
 setGeneric("interpolateCond", function(conditions, method) standardGeneric("interpolateCond"))
 setMethod("interpolateCond", signature(conditions = "data.frame", method = "character"), function(conditions, method) {
-
   #Interpolation
   interpolatedCond <- list()
   if(method %in% c("constant","linear")){
