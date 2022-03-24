@@ -34,17 +34,10 @@ browseVignettes("timescale")
 To get information on a specific function, one can use ? or the help() function in R. A .pdf manual in the main folder of the GitHub project is also available.
 
 ## Description
-<<<<<<< HEAD
 The package provides tools to compute the time elapsed in a different scaling of time. The package was developed to calculate development time of ectotherms in function of temperature, but has been built to deal with any other time scaling. The package offers predefined models, but models defined by the user are also accepted. 
 
 ## Why use this package for development time?
 Calculating development over a temperature series is relatively straightforward and does not require a whole package. The `timescale` package was developed to bring two important operations that become useful when manipulating development time beyond simple cases: 
-=======
-The package provides tools to compute the time elapsed in a different scaling of time. The package was developed to compute development time of ectotherms in function of temperature, but has been built to accept any other time scaling. The package offers predefined models, but is also structured to accept any model defined by the user. 
-
-## Why use this package for development time?
-Summing over time the development, calculated from temperature series, is relatively straightforward and does not require a whole package. The `timescale` package was developed to bring two important operations that become useful when manipulating development time beyond simple cases: 
->>>>>>> df25ab2211929f6ea42dcf141aa2efb0dca3fb09
 
 1. Computes development between any time, and not only at those of the temperature dataset
 2. Computes the inverse operation and estimate precisely when some development would be achieved
@@ -59,21 +52,12 @@ Here are some applied contexts in which we could use the package:
 
 - Scaling time into development time of insect pests for population dynamics, using hourly temperature and a non-linear thermal response.
 
-<<<<<<< HEAD
 - From historical temperature data, calculating when to sow crops to obtain uniform intervals at harvest and provide a continuous supply at market. 
 
 - Scaling time according to a model that use more than only temperature as a variable. Hydrothermal time (HTT) for seed germination is an example involving both temperature and water potential of the substrate and temperature.
 
 - Calculating growing degree days for crop, using daily records of minimum and maximum temperature (use two variables).
 
-=======
-- From historical temperature data, calculate when to sow crops to obtain uniform intervals at harvest and provide a continuous supply at market. 
-
-- Scaling time according to a model that use more than only temperature as a variable. Hydrothermal time (HTT) for seed germination is an example involving both temperature and water potential of the substrate and temperature.
-
-- The calculation of growing degree days for crop, using daily records of minimum and maximum temperature (use two variables).
-
->>>>>>> df25ab2211929f6ea42dcf141aa2efb0dca3fb09
 ## Useful functions
 The main functions are `timeScale` and `timeShift`, no other function require to be explicitly called.
 
@@ -82,11 +66,7 @@ The main functions are `timeScale` and `timeShift`, no other function require to
 - `timeShift`: the function estimates the upper bounds `x2` that would correspond to a specified period elapsed in the scaled domain. 
 
 ## Model and conditions
-<<<<<<< HEAD
 Although `model` and `conditions` are not objects belonging to a defined class (such as in S4 and R6); they must however respect some structure and conditions to be accepted by `timeScale` and `timeShift`.
-=======
-Although `model` and `conditions` are not objects belonging to a defined class (such as in S4 and R6); they must however respect some structure and conditions to be accepted by `timeScale` and `timeScale`.
->>>>>>> df25ab2211929f6ea42dcf141aa2efb0dca3fb09
 
 - 'model' is a function defined by the user that return the rate at which time elapse in the new scale. It takes variables, model parameters (under a `list` named `param`) and optional arguments (under a list named `control`). All arguments of the model that is not either `param` or `control` are considered variables; therefore, any number of variables and any name can be chosen (with the exception of the word `time`). The model should accept numeric vectors of the same length as variable and return a value greater or equal to zero. Some models are already included in the package and can serve as template (`modelGDD`, `modelLinear`, `modelBriere1999`).
 
@@ -127,11 +107,7 @@ param <- list(T0 = 10, a = 1)
 
 
 ### Function timeScale
-<<<<<<< HEAD
 We then use the `timeScale` function to compute the development (`z2`) between a reference 'x1' and some other time 'x2' (it can differ from the one of `conditions`).
-=======
-We then use the `timeScale` function to compute the development (`z2`) between a reference 'x1' and some other time 'x2' (it doesn't have to be same as the one of `conditions`).
->>>>>>> df25ab2211929f6ea42dcf141aa2efb0dca3fb09
 
 ```{r}
 x1 = rep(0,length.out = 6)
@@ -146,7 +122,6 @@ z1 <- rep(0,length.out = 6)
 x2CalcLower <- timeScale(z1, z2, model = model, conditions = conditions, param = param, inverse = TRUE, assignConstant = "lower")
 x2CalcLower
 ```
-<<<<<<< HEAD
 
 Note that `x2Calc` differs from `x2`, when the development rate defined by the model is zero for some period. As the corresponding scaled time `z2` remain constant over that period of time, the scaling function is not invertible. What the inverse option calculates is one of the time interval limits associated to the scaled time `z2`. With the option `assignConstant = "lower"` (the default), the function returns the first time the organism reached the specified development (`z2`), while `assignConstant = "upper"` make the function return the last occurrence.
 
@@ -155,27 +130,6 @@ WARNING: Numerical problems persist with the inverse (and `timeShift`) in presen
 ### Function timeShift
 Function `timeShift` is similiar to the inverse operation of timeScale, and calculate the time `x2`, from a reference `x1`, after which a specific period (`scaledPeriod`) has elapsed in the scaled domain. Both `x1` and `scaledPeriod` are vectors. Here, we set various initial time (`x1`) but set the period as a constant (reaching 1). The resulting vector correspond to the end of development of each cohort.
 
-=======
-
-Note that `x2Calc` differs from `x2`, when the development rate defined by the model is zero for some period. The corresponding scaled time `z2` remain constant over that period of time, the scaling function is therefore not invertible. What the inverse option calculates is one of the time interval limits associated to the scaled time `z2`. With the option `assignConstant = "lower"` (the default), the function returns the time the organism reached the development specified by `z2`, while `assignConstant = "upper"` make the function return the last occurrence.
-
-```{r}
-z1 <- rep(0,length.out = 6)
-x2CalcUpper <- timeScale(z1, z2, model = model, conditions = conditions, param = param, inverse = TRUE, assignConstant = "upper")
-x2CalcUpper
-```
-
-We can verify that there is no development on these interval.
-```{r}
-timeScale(x2CalcLower, x2CalcUpper, model = model, conditions = conditions, param = param)
-```
-
-WARNING: Numerical problems persist with the inverse (and `timeShift`) in presence of null rate, you should avoid to use the functions in such context until it is fixed.
-
-### Function timeShift
-Function timeShift is similiar to the inverse operation of timeScale, and calculate the time `x2`, from a reference `x1`, after which a specific period (`scaledPeriod`) has elapsed in the scaled domain. Both `x1` and `scaledPeriod` through the entry vectors. Here, we set various initial time (`x1`) but set the period as a constant (reaching 1). The resulting vector correspond to the end of development of each cohort.
-
->>>>>>> df25ab2211929f6ea42dcf141aa2efb0dca3fb09
 ```{r}
 x1 = seq(0,3,length.out = 6)
 scaledPeriod = rep(1,length.out = 6)
@@ -188,19 +142,13 @@ This  section is not required to use the package, but will help understand the m
 
 - `timeScale` and `timeShift` both start by performing validity checks, which are encapsulated in functions with name starting by validity (`validityConditions`, `validityModel`, `validityScaledPeriod`, `validityScaledTime`, `validityTime`).
 - For the direct `timeScale`: 
-<<<<<<< HEAD
     - `conditions` variables are interpolated using `interpolateCond`, which return a list of functions associated to each variable. At the moment, only constant interpolation is possible, but other methods are planned for future versions.
     - A composite model function is made by substituting the temporal response of variables (the interpolation of conditions) into model variables. The resulting model is a function depending only on time.
-=======
-    - `conditions` variables are interpolated using `interpolateCond`, which return a list of functions associated to each variable. At the moment, only constant interpolation is possible, but other methods would likely be considered in future versions.
-    - composite model function is made by substituting the temporal response of variables (the interpolation of conditions) into model variables. The resulting model is a function depending only on time.
->>>>>>> df25ab2211929f6ea42dcf141aa2efb0dca3fb09
     - The composite model is integrated between two time bounds (`x1` and `x2`). They can be any values in the range defined by conditions.
 - For the inverse option of `timeScale`: 
     - Models usually can return zero values, the rate therefore cannot be inverted before integration. 
     - The approach adopted is to estimate time difference (from zero) for a defined period corresponding to bounds of scaled time. This operation is accomplished by `timeShift`.
 - For `timeShift`: 
-<<<<<<< HEAD
     - The idea is to find at which time, the time elapsed in the scaled domain (calculated by the function `timeScale`) would reach a defined period (`scaledPeriod`). 
     - This can be accomplish by finding the root of the timeScale function minus the objective scaled period. 
     - As the rate is positive, the cumulative function is always increasing and there is only one root, or only one interval of roots. 
@@ -208,11 +156,3 @@ This  section is not required to use the package, but will help understand the m
 
 ## A work in progress
 The package is still in development, but a functional version would be available soon. Solving numerical problems and improving speed is the priority. Functionalities to be added and current issues are detailed in the GitHub issues section. Suggestions to improve the package are always welcome. 
-=======
-    - The idea is to find at which time, the time elapsed in the scaled domain (calculated by the function `timeScale`) would reach a defined period (scaledPeriod). 
-    - This can be accomplish by finding the root of the timeScale function minus the objective scaled period. 
-    - As the rate is positive, the cumulative function is always increasing and there is only one root, or only one interval of roots. If the objective scaled period is reached when the rate become zero, it would be associated to a time interval rather than a unique solution. The upper or lower bound is then return. This operation is performed by the function `intervalUniroot`. Time intervals with zero rate are identified from `conditions` by the function `rleInterval`.
-
-## A work in progress
-The package is still improving. A first functional version would be available soon. More models, examples and documentation will be added in the future. Functionalities to be added and current issues are detailed in the GitHub issues section. Suggestions to improve the package are always welcome. 
->>>>>>> df25ab2211929f6ea42dcf141aa2efb0dca3fb09
