@@ -11,7 +11,8 @@ timeShift(
   conditions,
   param = list(),
   control = list(),
-  interpolation = "linear"
+  interpolation = "constant",
+  assignConstant = "lower"
 )
 }
 \arguments{
@@ -27,7 +28,9 @@ timeShift(
 
 \item{control}{\code{list} of arguments that control the behaviour of the model.}
 
-\item{interpolation}{\code{character} corresponding to the name of the interpolating method for conditions. Available methods include \code{constant} and \code{linear}.}
+\item{interpolation}{\code{character} corresponding to the name of the interpolating method for conditions. Available methods only include \code{constant} at the moment and is the default value.}
+
+\item{assignConstant}{\code{character} indicating how to assign scaled time to time when it remains constant on a time interval. Choices are \code{lower} and \code{upper} for both end of the interval.}
 }
 \value{
 Return a vector of the same length as \code{x1} and \code{x2} representing the scaled time elapsed between those values.
@@ -41,16 +44,14 @@ Note that \code{x1} and the calculated \code{x2} must be in the time range provi
 \examples{
 #Setting entries
 conditions <- data.frame(time = seq(0,50,length.out = 100), temp = rnorm(10, 10, 5))
-condModel <- interpolateCond(conditions, method = "linear")
 model <- "modelLinear"
 param = list(a = 1, T0 = 10)
 x1 = seq(1,10,length.out = 10)
 scaledPeriod = rep(10,10)
-interpolation = "linear"
 control = list()
 inverse = FALSE
 
 #Calculating x2 time values
-x2 <- timeShift(x1, scaledPeriod = scaledPeriod, model = model, conditions = conditions, param = param, interpolation = "linear")
+x2 <- timeShift(x1, scaledPeriod = scaledPeriod, model = model, conditions = conditions, param = param)
 x2
 }

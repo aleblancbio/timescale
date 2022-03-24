@@ -1,6 +1,6 @@
 Package: timescale
 Title: A package for development time calculation and other time scalings
-Version: 0.0.25
+Version: 0.0.26
 Authors@R: c(person("Alexandre", "Leblanc", role = c("aut", "cre"), email = "aleblanc.bio@gmail.com"))
 Description: The package provides tools to compute the time elapsed in a different scaling of time. The package was developed to compute development time of ectotherms in function of temperature, but has been built to accept any other time scaling. The package offers predefined models, but is also structured to accept any model defined by the user. 
 License: GPL-3

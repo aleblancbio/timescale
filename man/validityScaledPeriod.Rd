@@ -11,7 +11,7 @@ validityScaledPeriod(
   conditions,
   param = list(),
   control = list(),
-  interpolation = "linear"
+  interpolation = "constant"
 )
 }
 \arguments{
@@ -27,7 +27,7 @@ validityScaledPeriod(
 
 \item{control}{\code{list} of arguments that control the behaviour of the model.}
 
-\item{interpolation}{\code{character} corresponding to the name of the interpolating method for conditions. Available methods include \code{constant} and \code{linear}.}
+\item{interpolation}{\code{character} corresponding to the name of the interpolating method for conditions. Available methods only include \code{constant} at the moment and is the default value.}
 }
 \value{
 Return \code{TRUE} if the condition is respected and an error otherwise.
@@ -42,5 +42,5 @@ model <- "modelLinear"
 param = list(a = 1, T0 = 10)
 x1 = seq(1,10,length.out = 10)
 scaledPeriod = rep(10,10)
-validityScaledPeriod(x1, scaledPeriod, model = model, conditions = conditions, param = param, interpolation = "linear")
+validityScaledPeriod(x1, scaledPeriod, model = model, conditions = conditions, param = param)
 }

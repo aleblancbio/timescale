@@ -29,6 +29,18 @@ The package offers predefined models, but is also structured to accept any model
 
 - The calculation of growing degree days for crop, using daily records of minimum and maximum temperature (use two variables).
 
+## Why use this package for development time?
+Taking the cumulative sum over development or growing degree day associated to temperature data is relatively straightforward. Then, what is the purpose of this package? The main reason is that the package perform operations that become mandatory when we manipulate development time beyond simple cases. More specifically, the package can: 
+
+- Computes development between any time, and not only at those of the temperature dataset
+- Computes the inverse operation and can estimate precisely when some development would be achieved.
+
+Less important aspects brought by the package, but still noteworthy, are that it: 
+
+- Contains preexisting linear and non-linear models but is also structured to accept any model defined by the user
+- Validates appropriate inputs
+- Provides a structure to handle more than only temperature
+
 
 ## Useful functions
 The main functions are `timeScale` and `timeShift`, no other function require to be explicitly called.

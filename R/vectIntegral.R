@@ -8,9 +8,16 @@
 #' @import pracma
 #' @export
 #' @examples
+#' #Simple case
 #' f <- function(x) (x)
 #' xmin <- seq(1,10,length.out = 10)
 #' xmax <- seq(11,20,length.out = 10)
+#' vectIntegral(f, xmin, xmax)
+#' 
+#' #Oscillating case (integrating over 2*pi)
+#' f <- function(x) sin(2*pi*x/100)
+#' xmin <- seq(0,100,length.out = 10)
+#' xmax <- xmin+100
 #' vectIntegral(f, xmin, xmax)
 #' 
 vectIntegral <- function(f, xmin, xmax, ...){

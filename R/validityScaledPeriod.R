@@ -6,7 +6,7 @@
 #' @param conditions \code{data.frame} with columns named \code{time} and variables expected to correspond to those of the model.
 #' @param param \code{list} parameters of the model.
 #' @param control \code{list} of arguments that control the behaviour of the model.
-#' @param interpolation \code{character} corresponding to the name of the interpolating method for conditions. Available methods include \code{constant} and \code{linear}.
+#' @param interpolation \code{character} corresponding to the name of the interpolating method for conditions. Available methods only include \code{constant} at the moment and is the default value.
 #' @return Return \code{TRUE} if the condition is respected and an error otherwise.
 #' @export
 #' @examples
@@ -16,10 +16,9 @@
 #' param = list(a = 1, T0 = 10)
 #' x1 = seq(1,10,length.out = 10)
 #' scaledPeriod = rep(10,10)
-#' validityScaledPeriod(x1, scaledPeriod, model = model, conditions = conditions, param = param, interpolation = "linear")
-setGeneric("validityScaledPeriod", function(x1, scaledPeriod, model , conditions, param = list(), control = list(), interpolation = "linear") standardGeneric("validityScaledPeriod"))
+#' validityScaledPeriod(x1, scaledPeriod, model = model, conditions = conditions, param = param)
+setGeneric("validityScaledPeriod", function(x1, scaledPeriod, model , conditions, param = list(), control = list(), interpolation = "constant") standardGeneric("validityScaledPeriod"))
 setMethod("validityScaledPeriod", signature(x1 = "numeric", scaledPeriod = "numeric", model = "character", conditions = "data.frame"), function(x1, scaledPeriod, model, conditions, param, control, interpolation) {
-
   #Check length of entries vectors
   if(length(x1) != length(scaledPeriod)){
     stop("x1 and scaledPeriod arguments must be of the same length")

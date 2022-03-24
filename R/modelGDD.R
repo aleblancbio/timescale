@@ -13,7 +13,6 @@
 #' modelGDD(Tmin = seq(0,20,2), Tmax = 5 + seq(0,20,2), param = list(T0 = 10), control = list(method = 1))
 #' 
 modelGDD <- function(Tmin, Tmax, param = list(T0), control = list(method = 1)){
-
   #Renaming parameter
   T0 <- param$T0
   

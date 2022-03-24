@@ -11,8 +11,9 @@ timeScale(
   conditions,
   param = list(),
   control = list(),
-  interpolation = "linear",
-  inverse = FALSE
+  interpolation = "constant",
+  inverse = FALSE,
+  assignConstant = "lower"
 )
 }
 \arguments{
@@ -28,29 +29,32 @@ timeScale(
 
 \item{control}{\code{list} of arguments that control the behaviour of the model.}
 
-\item{interpolation}{\code{character} corresponding to the name of the interpolating method for conditions. Available methods include \code{constant} and \code{linear}.}
+\item{interpolation}{\code{character} corresponding to the name of the interpolating method for conditions. Available methods only include \code{constant} at the moment and is the default value.}
 
 \item{inverse}{\code{logical} indicating if the inverse operation (i.e. scaled time to time transformation) should be performed.}
+
+\item{assignConstant}{\code{character} indicating how to assign scaled time to time when it remains constant on a time interval. Choices are \code{lower} and \code{upper} for both end of the interval.}
 }
 \value{
 Return a vector of the same length as \code{x1} and \code{x2} representing the scaled time elapsed between those values.
 }
 \description{
-Evaluate the time elapsed between two bounds (x1, x2) into a scaled domain given a rate model and condtions that represent its variables.
+Evaluate the time elapsed between two bounds (\code{x1}, \code{x2}) into a scaled domain given a rate model and condtions that represent its variables.
 }
 \details{
-Note that \code{x1} and \code{x2} must be in the time range provided by conditions. \cr \cr
+Both \code{x1} and \code{x2} must be in the time range provided by conditions. \cr \cr
 \code{model} is a function defined by the user that return the rate at which time elapse in the new scale. It takes variables, model parameters (\code{param} as a \code{list}) and optional arguments (under a \code{list} named \code{control}). All arguments of the model that is not either \code{param} or \code{control} are considered variables; therefore, any number of variables and any name can be chosen, with the exception of the word \code{time}). The model should accept numeric vectors of the same length as variable and return a value greater or equal to zero. Some models are already included in the package and can serve as template (\code{modelGDD}, \code{modelLinear}, \code{modelBriere1999}). \cr \cr
 \code{conditions} is a \code{data.frame} that contains one column named \code{time} and other columns with the same name as the model variables. It represents the evolution of the model variable through time. Checks are made when calling \code{timeScale} and \code{timeShift} to ensure \code{conditions} and the \code{model} are compatible. Other checks are made on \code{conditions}, including \code{time} must be a strictly increasing \code{numeric} containing \code{0}. Units of times must simply match the definition of the model, but day is a good choice. \cr \cr
+For the inverse option, a specified scaled time can be associated on an interval of time instead of a unique value, if the rate specified by the model is zero. In this case the inverse option of timeScale would return either the first occurrence the scaled time was reached (if \code{assignConstant = "lower"}) or the last ((if \code{assignConstant = "upper"}))
 }
 \examples{
-conditions <- data.frame(time = seq(0,30,length.out = 10), temp = 20 + rnorm(10, 10, 5))
+conditions <- data.frame(time = seq(0,30,length.out = 10), temp = rnorm(10, 25, 5))
 model <- "modelLinear"
 param = list(a = 1, T0 = 10)
 x1 = rep(0,10)
 x2 = seq(11,20,length.out = 10)
-z2 <- timeScale(x1, x2, model = model, conditions = conditions, param = param, interpolation = "linear")
+z2 <- timeScale(x1, x2, model = model, conditions = conditions, param = param)
 z1 <- rep(0,10,length.out = 10)
-timeScale(z1, z2, model = model, conditions = conditions, param = param, interpolation = "linear", inverse = TRUE)
+timeScale(z1, z2, model = model, conditions = conditions, param = param, inverse = TRUE)
 
 }
