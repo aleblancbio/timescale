@@ -67,4 +67,5 @@ intervalUniroot(f, lower, upper, constantLower, constantUpper, correction = corr
 
 uniroot(f, lower = lower, upper = upper, a = a, delta = delta)$root
 
+
 }

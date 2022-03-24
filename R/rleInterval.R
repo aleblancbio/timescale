@@ -1,5 +1,5 @@
 #' @title rle interval
-#' @description Define intervals limit (\code{lower}, \code{upper}) on which a vector (\code{x}) repeat a specified value at least \code{n} time (without any other values occuring). The function relies on the \code{rle} function from \code{base}. 
+#' @description Define intervals limit (\code{lower}, \code{upper}) on which a vector (\code{x}) repeat a specified value at least \code{n} time (without any other values ocuring). The function relies on the \code{rle} function from \code{base}. 
 #' @param x an atomic vector .
 #' @param value a single value to find in \code{x}.
 #' @param n the minimum of repetition to be considered.

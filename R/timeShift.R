@@ -47,10 +47,13 @@ setMethod("timeShift", signature(x1 = "numeric", scaledPeriod = "numeric", model
     #browser()
     ####constant interpolation implies 1 zero is enough to define period and shift by one the upper limit, except on reaching conditions upper limit)
     intervalZero <- rleInterval(x = modelValue, value = 0, n = 1)
-    constantLower <- intervalZero$lower
-    constantUpper <- intervalZero$upper
-    constantUpper[constantUpper  < nrow(conditions)] <- constantUpper[constantUpper  < nrow(conditions)] + 1
+    iLower <- intervalZero$lower
+    iUpper <- intervalZero$upper
+    iUpper[iUpper < nrow(conditions)] <- iUpper[iUpper  < nrow(conditions)] + 1
 
+    constantLower <- conditions$time[iLower]
+    constantUpper <- conditions$time[iUpper]
+    
   }else if (interpolation == "linear"){
     stop("zero rate intervals for linear interpolation undefined at the moment")
   }else{

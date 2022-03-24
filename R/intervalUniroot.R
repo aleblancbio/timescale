@@ -58,7 +58,7 @@ intervalUniroot <- function(f, lower, upper, constantLower, constantUpper, corre
  
   #Correct the root
   ##Search for the closest interval starting before the root (if it exist)
-  closestLogical <- root  >= constantLower
+  closestLogical <- root  >= constantLower 
   
   if(length(closestLogical) == 1){
     ##Closest interval values

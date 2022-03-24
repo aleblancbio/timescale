@@ -17,7 +17,7 @@ rleInterval(x, value, n)
 Return a list of two vectors (\code{lower} and \code{upper}) giving the position ofthe beginning and end of the intervals respecting the criteria.
 }
 \description{
-Define intervals limit (\code{lower}, \code{upper}) on which a vector (\code{x}) repeat a specified value at least \code{n} time (without any other values occuring). The function relies on the \code{rle} function from \code{base}.
+Define intervals limit (\code{lower}, \code{upper}) on which a vector (\code{x}) repeat a specified value at least \code{n} time (without any other values ocuring). The function relies on the \code{rle} function from \code{base}.
 }
 \examples{
 x <- sample(1:3, size = 100, replace = TRUE)
