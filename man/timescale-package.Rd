@@ -16,7 +16,7 @@ The function \code{timeShift} estimate the upper bounds \code{x2} that would cor
 }
 \section{Installation and help}{
 
-The package can be installed from github by entering the following command lines in R:
+The package can be installed from github by entering the following command lines in R: \cr
 \code{devtools::install_github("aleblancbio/timescale", build_vignettes = TRUE)}.
 \cr\cr
 An overview of the package can be accessed through: \code{browseVignettes('timescale')}.
