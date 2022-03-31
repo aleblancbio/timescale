@@ -49,8 +49,9 @@ intervalUniroot <- function(f, lower, upper, constantLower, constantUpper, corre
   #Truncate constant interval if outside searching interval (and eliminate new duplicates)
   constantLower[constantLower < lower] <- lower
   constantUpper[constantUpper > upper] <- upper
-  constantLower <- unique(constantLower)
-  constantUpper <- unique(constantUpper)
+  logicalDuplicated <- duplicated(constantLower) | duplicated(constantUpper)
+  constantLower <- constantLower[!logicalDuplicated]
+  constantUpper <- constantUpper[!logicalDuplicated]
   
   #Compute the root
   root <- uniroot(f, lower = lower, upper = upper, ...)$root
@@ -58,12 +59,12 @@ intervalUniroot <- function(f, lower, upper, constantLower, constantUpper, corre
  
   #Correct the root
   ##Search for the closest interval starting before the root (if it exist)
-  closestLogical <- root  >= constantLower 
+  lowerLogical <- root  >= constantLower 
   
-  if(length(closestLogical) == 1){
+  if(any(lowerLogical)){
     ##Closest interval values
-    closestLower <- min(constantLower[closestLogical])
-    closestUpper <- constantUpper[closestLogical]
+    closestLower <- max(constantLower[lowerLogical])
+    closestUpper <- constantUpper[constantLower == closestLower]
     
     ##Correction to one of the bound if the value is within the interval
 

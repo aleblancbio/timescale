@@ -34,4 +34,20 @@ test_that("Composition timeScale on timeShift return initial values of scaledPer
 
 test_that("timeShift return proper values for a simple case (with zero rate)", {
 #to be written (important)
+  
+  conditions <- data.frame(time = seq(0,5), temp = c(0,15,10,20,20,0))
+  model <- "modelLinear"
+  param = list(a = 1, T0 = 10)
+  
+  #Initial time
+  x1 = rep(0,6)
+  scaledPeriod = c(0,5,10,15,20,25)
+  
+  #Compute x2 scaled period
+  x2 <- timeShift(x1, scaledPeriod = scaledPeriod, model = model, conditions = conditions, param = param)
+  answer <- c(0,2,3.5,4,4.5,5) #Careful check at the second number
+  
+  #Equality given some rounding
+  expect_equal(x2, answer, tolerance=1e-3)
+  
 })
