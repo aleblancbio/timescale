@@ -67,6 +67,7 @@ setMethod("timeShift", signature(x1 = "numeric", scaledPeriod = "numeric", model
     x2[i] <- intervalUniroot(h, lower, upper, constantLower, constantUpper, correction = correction,  x1 = x1[i], scaledPeriod = scaledPeriod[i], model = model, conditions = conditions, param = param, control = control, interpolation = interpolation, inverse = FALSE)
     #x2[i] <- uniroot(h, lower = lower, upper = upper, x1 = x1[i], scaledPeriod = scaledPeriod[i], model = model, conditions = conditions, param = param, control = control, interpolation = interpolation, inverse = FALSE)$root
   }
+
   
   return(x2)
 })

@@ -33,7 +33,7 @@ timeScale(
 
 \item{inverse}{\code{logical} indicating if the inverse operation (i.e. scaled time to time transformation) should be performed.}
 
-\item{assignConstant}{\code{character} indicating how to assign scaled time to time when it remains constant on a time interval. Choices are \code{lower} and \code{upper} for both end of the interval.}
+\item{assignConstant}{\code{character} vector of length 2 indicating how to assign scaled time \code{x1} and \code{x2} to time when it remains constant on a time interval. Choices are \code{lower} and \code{upper} for both end of the interval. The default values are \code{assignConstant = c("lower","lower")}.}
 }
 \value{
 Return a vector of the same length as \code{x1} and \code{x2} representing the scaled time elapsed between those values.
@@ -45,7 +45,11 @@ Evaluate the time elapsed between two bounds (\code{x1}, \code{x2}) into a scale
 Both \code{x1} and \code{x2} must be in the time range provided by conditions. \cr \cr
 \code{model} is a function defined by the user that return the rate at which time elapse in the new scale. It takes variables, model parameters (\code{param} as a \code{list}) and optional arguments (under a \code{list} named \code{control}). All arguments of the model that is not either \code{param} or \code{control} are considered variables; therefore, any number of variables and any name can be chosen, with the exception of the word \code{time}). The model should accept numeric vectors of the same length as variable and return a value greater or equal to zero. Some models are already included in the package and can serve as template (\code{modelGDD}, \code{modelLinear}, \code{modelBriere1999}). \cr \cr
 \code{conditions} is a \code{data.frame} that contains one column named \code{time} and other columns with the same name as the model variables. It represents the evolution of the model variable through time. Checks are made when calling \code{timeScale} and \code{timeShift} to ensure \code{conditions} and the \code{model} are compatible. Other checks are made on \code{conditions}, including \code{time} must be a strictly increasing \code{numeric} containing \code{0}. Units of times must simply match the definition of the model, but day is a good choice. \cr \cr
-For the inverse option, a specified scaled time can be associated on an interval of time instead of a unique value, if the rate specified by the model is zero. In this case the inverse option of timeScale would return either the first occurrence the scaled time was reached (if \code{assignConstant = "lower"}) or the last ((if \code{assignConstant = "upper"}))
+For the inverse option, a specified scaled time can be associated on an interval of time instead of a unique value, if the rate specified by the model is zero. In this case the inverse option of \code{timeScale} would return either the first occurrence the scaled time was reached (if \code{assignConstant = "lower"}) or the last ((if \code{assignConstant = "upper"}))
+\cr \cr
+For the inverse option, the time (\code{z1} and \code{z2}) associated to \code{x1} and \code{x2} are calculated using \code{timeShift}, values are calculated separately using the first and second element of \code{assignConstant}.
+
+\code{assignConstant} affect  in the same way, one
 }
 \examples{
 conditions <- data.frame(time = seq(0,30,length.out = 10), temp = rnorm(10, 25, 5))

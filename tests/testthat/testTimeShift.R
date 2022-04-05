@@ -51,3 +51,29 @@ test_that("timeShift return proper values for a simple case (with zero rate)", {
   expect_equal(x2, answer, tolerance=1e-3)
   
 })
+
+test_that("timeScale inverse return lower and upper bounds encompassing initial values (with zero rate)", {
+  set.seed(6)
+  conditions <- data.frame(time = seq(0,30,length.out = 10), temp = rnorm(10, 10, 5))
+  model <- "modelLinear"
+  param = list(a = 1, T0 = 10)
+  
+  #Initial time
+  x1 = rep(0,10,length.out = 10)
+  x2 = seq(0,30,length.out = 10)
+  
+  #Scaled time
+  y1 <- rep(0,10,length.out = 10)
+  y2 <- timeScale(x1, x2, model = model, conditions = conditions, param = param)
+  
+  #Scaling back to original time
+  x2CalcUpper <- timeShift(x1[3], y2[3], model = model, conditions = conditions, param = param, assignConstant = c("upper"))
+  conditions
+  
+  #Within bounds given some rounding
+  expect_true(all(x2 >= x2CalcLower - 1e-3 & x2 <= x2CalcUpper + 1e-3))
+  
+  x2CalcUpper[3]
+  x2[3]
+  ###!!!Case with a few zero on start, problem with upper. Check intervalUniroot.
+})
