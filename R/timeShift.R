@@ -64,9 +64,10 @@ setMethod("timeShift", signature(x1 = "numeric", scaledPeriod = "numeric", model
   correction <- paste0("constant",stringr::str_to_title(assignConstant))
   x2 <- vector("numeric", length = length(x1))
   for (i in seq_along(x2)){
-    x2[i] <- intervalUniroot(h, lower, upper, constantLower, constantUpper, correction = correction,  x1 = x1[i], scaledPeriod = scaledPeriod[i], model = model, conditions = conditions, param = param, control = control, interpolation = interpolation, inverse = FALSE)
+    x2[i] <- intervalUniroot(h, lower, upper, constantLower, constantUpper, correction = correction, tol = 1e-4,  x1 = x1[i], scaledPeriod = scaledPeriod[i], model = model, conditions = conditions, param = param, control = control, interpolation = interpolation, inverse = FALSE)
     #x2[i] <- uniroot(h, lower = lower, upper = upper, x1 = x1[i], scaledPeriod = scaledPeriod[i], model = model, conditions = conditions, param = param, control = control, interpolation = interpolation, inverse = FALSE)$root
   }
+
   
   return(x2)
 })

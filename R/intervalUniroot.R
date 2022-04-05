@@ -6,6 +6,7 @@
 #' @param constantLower a vector of lower limits of intervals on which the function is constant.
 #' @param constantUpper a vector of upper limits of intervals on which the function is constant.
 #' @param correction a \code{character} indicating to which value of the interval correct the root, either \code{constantLower} or \code{constantUpper}.
+#' @param tol \code{numeric} indicating the tolerance for equality with interval bounds, default value is 0.
 #' @param ... arguments to pass to the function \code{uniroot}.
 #' @return Return only the root (a constant), other components returned by \code{uniroot} are dismissed.
 #' @details The function does not modify the searching behaviour of \code{uniroot}, but instead correct the root if it falls on a constant interval. Note than intervals are truncated at \code{lower} and \code{upper} if they fall outside the searching interval.
@@ -40,7 +41,7 @@
 #' uniroot(f, lower = lower, upper = upper, a = a, delta = delta)$root
 #'
 #'
-intervalUniroot <- function(f, lower, upper, constantLower, constantUpper, correction = "constantLower", ...){
+intervalUniroot <- function(f, lower, upper, constantLower, constantUpper, correction = "constantLower", tol = 0, ...){
   #Check length of vectors
   if(length(constantLower)!=length(constantUpper)){
     stop("constantLower and constantUpper arguments must be of the same length")
@@ -56,10 +57,10 @@ intervalUniroot <- function(f, lower, upper, constantLower, constantUpper, corre
   #Compute the root
   root <- uniroot(f, lower = lower, upper = upper, ...)$root
   #root <- uniroot(f, lower = lower, upper = upper, a = a, delta = delta)$root
- 
+
   #Correct the root
   ##Search for the closest interval starting before the root (if it exist)
-  lowerLogical <- root  >= constantLower 
+  lowerLogical <- root  >= constantLower - tol
   
   if(any(lowerLogical)){
     ##Closest interval values
@@ -68,7 +69,7 @@ intervalUniroot <- function(f, lower, upper, constantLower, constantUpper, corre
     
     ##Correction to one of the bound if the value is within the interval
 
-    logicalWithin <- root <= closestUpper 
+    logicalWithin <- root <= closestUpper + tol
     if(logicalWithin){
       if(correction == "constantUpper"){
         root <- closestUpper
