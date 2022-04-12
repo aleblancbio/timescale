@@ -15,6 +15,11 @@
 #' x <- seq(0,30,length.out = 100)
 #' lines(x,f$temp(x), lty = 1)
 #' 
+#' f <- interpolateCond(conditions, method = "spline")
+#' #Plotting the result for temp 
+#' plot(conditions$time,conditions$temp)
+#' x <- seq(0,30,length.out = 100)
+#' lines(x,f$temp(x), lty = 1)
 setGeneric("interpolateCond", function(conditions, method) standardGeneric("interpolateCond"))
 setMethod("interpolateCond", signature(conditions = "data.frame", method = "character"), function(conditions, method) {
   #Interpolation
@@ -24,6 +29,11 @@ setMethod("interpolateCond", signature(conditions = "data.frame", method = "char
     for(i in variableConditions(conditions)){
       interpolatedCond[[i]] <- approxfun(x = conditions$time, y = conditions[[i]], method = method, rule = 1, f = 0, ties = mean)
     }
+  }else if(method %in% c("spline")){
+      #Spline case (natural cubic)
+      for(i in variableConditions(conditions)){
+        interpolatedCond[[i]] <- splinefun(x = conditions$time, y = conditions[[i]], method = "natural", ties = mean)
+      }
   }else{
     stop("Undefined method of interpolation for conditions")
   }

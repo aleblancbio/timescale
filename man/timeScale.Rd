@@ -13,7 +13,7 @@ timeScale(
   control = list(),
   interpolation = "constant",
   inverse = FALSE,
-  assignConstant = "lower"
+  assignConstant = c("lower", "lower")
 )
 }
 \arguments{

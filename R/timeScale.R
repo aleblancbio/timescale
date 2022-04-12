@@ -54,7 +54,7 @@ setMethod("timeScale", signature(x1 = "numeric", x2 = "numeric", model = "charac
   }
   
   #Interpolation of conditions and composition with the model
-  if(interpolation != "constant"){
+  if(!(interpolation %in% c("constant", "linear", "spline"))){
     stop("wrong interpolation method")
   }
   
@@ -73,11 +73,11 @@ setMethod("timeScale", signature(x1 = "numeric", x2 = "numeric", model = "charac
     #Scale time (direct case) 
     ##Calculate scaled time z2-z1 with time x1 as reference, from time x1 and x2 (integration)
     #z <- vectIntegral(f = compModel, xmin = x1, xmax = x2, method = "Kronrod")
-    z <- vectIntegrate(f = compModel, lower = x1, upper = x2, subdivisions = 10000L)
+    z <- vectIntegrate(f = compModel, lower = x1, upper = x2, subdivisions = 100000L, rel.tol = .Machine$double.eps^0.5)
   }
 
   #Rounding to avoid numerical error on inverse
-  z <- round(z, digits = 4)
+  z <- round(z, digits = 6)
   
   return(z)
 })

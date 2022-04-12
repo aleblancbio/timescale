@@ -1,102 +1,93 @@
-test_that("intervalUniroot returns specified bound (unconstrained)", {
+test_that("intervalUniroot returns specified bound (continuous, no gradient)", {
   #Define a function that reach zero at a +- delta
-  f <- function(x, a, delta){
-    y <- rep(0,length = length(x))
-    y[x <= a - delta] <- x[x <= a - delta] - (a - delta)
-    y[x >= a + delta] <- x[x >= a + delta] - (a + delta)
-    
-    return(y)  
+  g <- function(x, a, delta){
+   y <- rep(0,length = length(x))
+   y[x <= a - delta] <- x[x <= a - delta] - (a - delta)
+   y[x >= a + delta] <- x[x >= a + delta] - (a + delta)
+   
+   return(y)  
   }
+  
   #Define parameters and range on which the function is known to be constant
   a <- 5
   delta <- 1
-  constantLower <- (a - delta)
-  constantUpper <- (a + delta)
   lower = - 10
   upper = 10
   
-  #Interval uniroot return constant lower and upper if unconstrained
-  correction = "constantLower"
-  y <- intervalUniroot(f, lower, upper, constantLower, constantUpper, correction = correction, a = a, delta = delta)
-  expect_equal(y, constantLower, tolerance=1e-3)
+  #Without gradient provided
+  y <- intervalUniroot(g, lower, upper, correction = "lower", a = a, delta = delta)
+  answer <- (a - delta)
+  expect_equal(y, answer, tolerance=1e-3)
   
-  correction = "constantUpper"
-  y <- intervalUniroot(f, lower, upper, constantLower, constantUpper, correction = correction, a = a, delta = delta)
-  expect_equal(y, constantUpper, tolerance=1e-3)
+  y <- intervalUniroot(g, lower, upper, correction = "upper", a = a, delta = delta)
+  answer <- (a + delta)
+  expect_equal(y, answer, tolerance=1e-3)
+ 
+  y <- intervalUniroot(g, lower, upper, correction = "none", a = a, delta = delta)
+  answer <-   uniroot(g, lower = lower, upper = upper, a = a, delta = delta)$root
+  expect_equal(y, answer, tolerance=1e-3)
+  
 })
 
-test_that("intervalUniroot returns specified bound (constrained)", {  
+test_that("intervalUniroot returns specified bound (step function, no gradient)", {
   #Define a function that reach zero at a +- delta
-  f <- function(x, a, delta){
+  g <- function(x, a, delta){
     y <- rep(0,length = length(x))
-    y[x <= a - delta] <- x[x <= a - delta] - (a - delta)
-    y[x >= a + delta] <- x[x >= a + delta] - (a + delta)
+    y[x < a - delta] <- -1
+    y[x >= a + delta] <- 1
     
     return(y)  
   }
+  
   #Define parameters and range on which the function is known to be constant
   a <- 5
   delta <- 1
-  constantLower <- (a - delta)
-  constantUpper <- (a + delta)
-  lower = 4.5
-  upper = 5.5
+  lower = - 10
+  upper = 10
   
-  #Interval if constrained
-  correction = "constantLower"
-  y <- intervalUniroot(f, lower, upper, constantLower, constantUpper, correction = correction, a = a, delta = delta)
-  expect_equal(y, lower, tolerance=1e-3)
+  #Without gradient provided
+  y <- intervalUniroot(g, lower, upper, correction = "lower", a = a, delta = delta)
+  answer <- (a - delta)
+  expect_equal(y, answer, tolerance=1e-3)
   
-  correction = "constantUpper"
-  y <- intervalUniroot(f, lower, upper, constantLower, constantUpper, correction = correction, a = a, delta = delta)
-  expect_equal(y, upper, tolerance=1e-3)
+  y <- intervalUniroot(g, lower, upper, correction = "upper", a = a, delta = delta)
+  answer <- (a + delta)
+  expect_equal(y, answer, tolerance=1e-3)
+  
+  y <- intervalUniroot(g, lower, upper, correction = "none", a = a, delta = delta)
+  answer <-   uniroot(g, lower = lower, upper = upper, a = a, delta = delta)$root
+  expect_equal(y, answer, tolerance=1e-3)
+  
 })
 
-test_that("intervalUniroot returns specified bound or not depending on tol (when numerically outside)", {
+test_that("intervalUniroot returns specified bound (unique root)", {
   #Define a function that reach zero at a +- delta
-  f <- function(x, a, delta){
+  g <- function(x, a, delta){
     y <- rep(0,length = length(x))
-    y[x <= a - delta] <- x[x <= a - delta] - (a - delta)
-    y[x >= a + delta] <- x[x >= a + delta] - (a + delta)
+    y[x < a - delta] <- -1
+    y[x >= a + delta] <- 1
     
     return(y)  
   }
-  #Case outside tolerance
-  ##Define parameters and range on which the function is known to be constant
+  
+  #Define parameters and range on which the function is known to be constant
   a <- 5
   delta <- 0
-  constantLower <- (a - delta) + 1e-2
-  constantUpper <- (a + delta) - 1e-2
-  lower = -10
+  lower = - 10
   upper = 10
   
-  ##Interval if outside 
-  tol = 1e-3
-  correction = "constantLower"
-  y <- intervalUniroot(f, lower, upper, constantLower, constantUpper, correction = correction, tol = tol, a = a, delta = delta)
-  expect_true(abs(y - constantLower) >= 1e-3) #expected
+  #Without gradient provided
+  y <- intervalUniroot(g, lower, upper, correction = "lower", a = a, delta = delta)
+  answer <- (a - delta)
+  expect_equal(y, answer, tolerance=1e-3)
   
-  correction = "constantUpper"
-  y <- intervalUniroot(f, lower, upper, constantLower, constantUpper, correction = correction, tol = tol, a = a, delta = delta)
-  expect_true(abs(y - constantUpper) >= 1e-3) #expected
+  y <- intervalUniroot(g, lower, upper, correction = "upper", a = a, delta = delta)
+  answer <- (a + delta)
+  expect_equal(y, answer, tolerance=1e-3)
   
-  #Case within tolerance
-  ##Define parameters and range on which the function is known to be constant
-  a <- 5
-  delta <- 0
-  constantLower <- (a - delta) + 1e-2
-  constantUpper <- (a + delta) - 1e-2
-  lower = -10
-  upper = 10
+  y <- intervalUniroot(g, lower, upper, correction = "none", a = a, delta = delta)
+  answer <-   uniroot(g, lower = lower, upper = upper, a = a, delta = delta)$root
+  expect_equal(y, answer, tolerance=1e-3)
   
-  ##Interval if outside (within tolerance)
-  tol = 1e-1
-  correction = "constantLower"
-  y <- intervalUniroot(f, lower, upper, constantLower, constantUpper, correction = correction, tol = tol, a = a, delta = delta)
-  expect_equal(y, constantLower, tolerance=1e-3)
-  
-  correction = "constantUpper"
-  y <- intervalUniroot(f, lower, upper, constantLower, constantUpper, correction = correction, tol = tol, a = a, delta = delta)
-  expect_equal(y, constantUpper, tolerance=1e-3)
 })
 

@@ -36,37 +36,18 @@ setMethod("timeShift", signature(x1 = "numeric", scaledPeriod = "numeric", model
   lower = min(conditions$time)
   upper = max(conditions$time)
   
-  ##Find intervals with zero rate
-  ###Evaluate model at conditions time
-  variableValues <- as.list(conditions[ ,variableModel(model), drop = FALSE])
-  args = c(variableValues, list(param = param, control = control))
-  modelValue <- do.call(model, args = args)
-
-  ###Identify the intervals
-  if(interpolation == "constant"){
-    #browser()
-    ####constant interpolation implies 1 zero is enough to define period and shift by one the upper limit, except on reaching conditions upper limit)
-    intervalZero <- rleInterval(x = modelValue, value = 0, n = 1)
-    iLower <- intervalZero$lower
-    iUpper <- intervalZero$upper
-    iUpper[iUpper < nrow(conditions)] <- iUpper[iUpper  < nrow(conditions)] + 1
-
-    constantLower <- conditions$time[iLower]
-    constantUpper <- conditions$time[iUpper]
-    
-  }else if (interpolation == "linear"){
-    stop("zero rate intervals for linear interpolation undefined at the moment")
-  }else{
+  ###Control for interpolation
+  #Interpolation of conditions and composition with the model
+  if(!(interpolation %in% c("constant", "linear","spline"))){
     stop("wrong interpolation method")
   }
+  
 
-  ##Find roots of the objective function (return the lower value if on an interval)
-  correction <- paste0("constant",stringr::str_to_title(assignConstant))
+  ##Find roots of the objective function (return the specified bounds if on an interval)
   x2 <- vector("numeric", length = length(x1))
   for (i in seq_along(x2)){
-    x2[i] <- intervalUniroot(h, lower, upper, constantLower, constantUpper, correction = correction, tol = 1e-4,  x1 = x1[i], scaledPeriod = scaledPeriod[i], model = model, conditions = conditions, param = param, control = control, interpolation = interpolation, inverse = FALSE)
-    #x2[i] <- uniroot(h, lower = lower, upper = upper, x1 = x1[i], scaledPeriod = scaledPeriod[i], model = model, conditions = conditions, param = param, control = control, interpolation = interpolation, inverse = FALSE)$root
-  }
+    x2[i] <- intervalUniroot(h, lower, upper, correction = assignConstant, x1 = x1[i], scaledPeriod = scaledPeriod[i], model = model, conditions = conditions, param = param, control = control, interpolation = interpolation, inverse = FALSE)
+   }
 
   
   return(x2)
@@ -78,8 +59,9 @@ h <- function(x, x1, scaledPeriod , model = model, conditions = conditions, para
   if(length(x1) != 1 | length(scaledPeriod) != 1){
     stop("x1 and scaledPeriod must be of length one when evaluating the objective function")
   }
+
   #Objective function return zero when elapsed time (delta) reach the scaledPeriod
-  x1 <- rep(x1,length(x))
+  x1 <- rep(x1, length(x))
   delta <- timeScale(x1 = x1, x2 = x, model = model, conditions = conditions, param = param, control = control, interpolation = interpolation, inverse = inverse)
   z <- delta - scaledPeriod
   return(z)

@@ -65,13 +65,12 @@ test_that("timeScale inverse return lower and upper bounds encompassing initial 
   #Scaled time
   y1 <- rep(0,10,length.out = 10)
   y2 <- timeScale(x1, x2, model = model, conditions = conditions, param = param)
-  
+  y2
   #Scaling back to original time
   x2CalcUpper <- timeShift(x1, y2, model = model, conditions = conditions, param = param, assignConstant = c("upper"))
   x2CalcLower <- timeShift(x1, y2, model = model, conditions = conditions, param = param, assignConstant = c("lower"))
-  conditions
-  
+ 
   #Within bounds given some rounding
   expect_true(all(x2 >= x2CalcLower - 1e-3 & x2 <= x2CalcUpper + 1e-3))
-  ###!!!Check intervalUniroot.
+  #Seems not to work with integrate (timeScale estimate seem to be inconsistent as bounds change)
 })

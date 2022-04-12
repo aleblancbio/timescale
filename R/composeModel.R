@@ -37,6 +37,7 @@ setMethod("composeModel", signature(model = "character", condModel = "list"), fu
     condModelCall <- list()
     for (i in names(condModel)){
       condModelCall[[i]] <- do.call(condModel[[i]], args = list(v=x))
+      #condModelCall[[i]] <- do.call(condModel[[i]], args = list(x=x))
     }
     #Pass condModel functions as variables in model
     args = c(condModelCall, list(param = param, control = control))
