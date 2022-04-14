@@ -32,52 +32,42 @@
 #'
 setGeneric("timeScale", function(x1, x2, model , conditions, param = list(), control = list(), interpolation = "constant", inverse = FALSE, assignConstant = c("lower", "lower")) standardGeneric("timeScale"))
 setMethod("timeScale", signature(x1 = "numeric", x2 = "numeric", model = "character", conditions = "data.frame"), function(x1, x2, model, conditions, param, control, interpolation, inverse, assignConstant) {
-  #Validity checks
-  validityModel(model)
-  validityConditions(conditions, model)
-  if(inverse){
-    validityScaledTime(x1, model = model, conditions = conditions, param = param, interpolation = interpolation)
-    validityScaledTime(x2, model = model, conditions = conditions, param = param, interpolation = interpolation)
-  }else{
-    validityTime(x1, conditions)
-    validityTime(x2, conditions)
-  }
 
-  #assignConstant is of proper length and values
-  if(length(assignConstant) == 2){
-    #Check for possible values
-    if(!(all(assignConstant %in% c("lower", "upper")))){
-      stop("assignConstant values must be lower or upper")
-    }
-  }else{
-    stop("assignConstant must be of length 2")
-  }
-  
-  #Interpolation of conditions and composition with the model
-  if(!(interpolation %in% c("constant", "linear", "spline"))){
+  #Validity check on interpolation method
+  if(!(interpolation %in% c("constant"))){
     stop("wrong interpolation method")
   }
   
-  condModel <- interpolateCond(conditions, method = interpolation)
-  compModel <- composeModel(model, condModel, param = param, control = control)
+  #Generate functions of rate model and its integral only in function of time
+  timeModelFunction <- timeModel(model = model, conditions = conditions, param = param, control = control, interpolation = interpolation)
+  timeModelIntegralFunction <- timeModelIntegral(model = model, conditions = conditions, param = param, control = control, interpolation = interpolation)
   
-  if(inverse){
-    #Scale time (inverse case)
+  if(!inverse){
+    #Scale time (direct case)
+    ##Validity checks on x1 and x2 (within the definition range of conditions)
+    validityTime(x1, conditions)
+    validityTime(x2, conditions)
+
+    ##Compute the time elapsed between x1 and x2
+    z <- timeModelIntegralFunction(x2) -  timeModelIntegralFunction(x1)
+ 
+  }else{
+    ##Validity checks on assignConstant (proper length and values)
+    if(length(assignConstant) == 2){
+      #Check for possible values
+      if(!(all(assignConstant %in% c("lower", "upper")))){
+        stop("assignConstant values must be lower or upper")
+      }
+    }else{
+      stop("assignConstant must be of length 2")
+    }
+
     ##Calculate time difference z2-z1 with scaled time x1 as reference, from scaled time x1 and x2
-    z0 <- rep(0, length(x1))
+    z0 <- rep(min(conditions$time), length(x1))
     z1 <- timeShift(z0, scaledPeriod = x1, model = model, conditions = conditions, param = param, interpolation = interpolation, assignConstant = assignConstant[1])
     z2 <- timeShift(z0, scaledPeriod = x2, model = model, conditions = conditions, param = param, interpolation = interpolation, assignConstant = assignConstant[2])
     z <- z2 - z1
-
-  }else{
-    #Scale time (direct case) 
-    ##Calculate scaled time z2-z1 with time x1 as reference, from time x1 and x2 (integration)
-    #z <- vectIntegral(f = compModel, xmin = x1, xmax = x2, method = "Kronrod")
-    z <- vectIntegrate(f = compModel, lower = x1, upper = x2, subdivisions = 100000L, rel.tol = .Machine$double.eps^0.5)
   }
 
-  #Rounding to avoid numerical error on inverse
-  z <- round(z, digits = 6)
-  
   return(z)
 })

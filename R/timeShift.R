@@ -19,50 +19,49 @@
 #' param = list(a = 1, T0 = 10)
 #' x1 = seq(1,10,length.out = 10)
 #' scaledPeriod = rep(10,10)
-#' control = list()
-#' inverse = FALSE
 #' 
 #' #Calculating x2 time values
 #' x2 <- timeShift(x1, scaledPeriod = scaledPeriod, model = model, conditions = conditions, param = param)
 #' x2
 setGeneric("timeShift", function(x1, scaledPeriod, model , conditions, param = list(), control = list(), interpolation = "constant", assignConstant = "lower") standardGeneric("timeShift"))
 setMethod("timeShift", signature(x1 = "numeric", scaledPeriod = "numeric", model = "character", conditions = "data.frame"), function(x1, scaledPeriod, model, conditions, param, control, interpolation, assignConstant) {
-
-  #Validity checks on scaledPeriod range and length
+  #Validity checks
+  ##Validity checks on scaledPeriod range and length
   validityScaledPeriod(x1 = x1, scaledPeriod = scaledPeriod, model = model, conditions = conditions, param = param, interpolation = interpolation)
   
-  #Find the root of h (for each element of the entry vector). As h is monotonic function, there is only one root or interval of roots per element.
-  ##Define searching bounds as interpolation bounds
-  lower = min(conditions$time)
-  upper = max(conditions$time)
-  
-  ###Control for interpolation
-  #Interpolation of conditions and composition with the model
-  if(!(interpolation %in% c("constant", "linear","spline"))){
+  ##Validity check on interpolation method
+  if(!(interpolation %in% c("constant"))){
     stop("wrong interpolation method")
   }
   
+  #Generate functions of rate model and its integral only in function of time
+  #timeModelFunction <- timeModel(model = model, conditions = conditions, param = param, control = control, interpolation = interpolation)
+  timeModelIntegralFunction <- timeModelIntegral(model = model, conditions = conditions, param = param, control = control, interpolation = interpolation)
+  
+  #Find the root of the objective function h (for each element of the entry vector). As h is a monotonic function, there is only one root or interval of roots per element.
+  ##Define searching bounds as conditions bounds
+  lower = min(conditions$time)
+  upper = max(conditions$time)
 
   ##Find roots of the objective function (return the specified bounds if on an interval)
   x2 <- vector("numeric", length = length(x1))
   for (i in seq_along(x2)){
-    x2[i] <- intervalUniroot(h, lower, upper, correction = assignConstant, x1 = x1[i], scaledPeriod = scaledPeriod[i], model = model, conditions = conditions, param = param, control = control, interpolation = interpolation, inverse = FALSE)
+    x2[i] <- intervalUniroot(h, lower, upper, correction = assignConstant, x1 = x1[i], scaledPeriod = scaledPeriod[i], timeModelIntegralFunction = timeModelIntegralFunction)
    }
 
-  
   return(x2)
 })
 
 #Objective function
-h <- function(x, x1, scaledPeriod , model = model, conditions = conditions, param = param, control = control, interpolation = interpolation, inverse = FALSE){
+h <- function(x, x1, scaledPeriod, timeModelIntegralFunction){
   #Validity checks Both x1 and scaledPeriod are expected to be a single constants
   if(length(x1) != 1 | length(scaledPeriod) != 1){
     stop("x1 and scaledPeriod must be of length one when evaluating the objective function")
   }
-
+  
   #Objective function return zero when elapsed time (delta) reach the scaledPeriod
   x1 <- rep(x1, length(x))
-  delta <- timeScale(x1 = x1, x2 = x, model = model, conditions = conditions, param = param, control = control, interpolation = interpolation, inverse = inverse)
+  delta <- timeModelIntegralFunction(x)-timeModelIntegralFunction(x1)
   z <- delta - scaledPeriod
   return(z)
 }

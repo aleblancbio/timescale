@@ -21,7 +21,7 @@ test_that("Composition of timeScale direct and inverse return initial values (no
 
 test_that("timeScale returns increasing values (with zero rate)", {
   set.seed(6)
-  conditions <- data.frame(time = seq(0,30,length.out = 10), temp = rnorm(10, 10, 5))
+  conditions <- data.frame(time = seq(0,265,length.out = 265*24), temp = rnorm(10, 10, 5))
   model <- "modelLinear"
   param = list(a = 1, T0 = 10)
   
@@ -33,11 +33,10 @@ test_that("timeScale returns increasing values (with zero rate)", {
   #Scaled time
   y2 <- timeScale(x1, x2, model = model, conditions = conditions, param = param)
   z <- y2[2:n] - y2[seq.int(1,n-1)]
-  z[z< 0]
-  
+
   #Within bounds given some rounding
-  expect_true(all(x2 >= x2CalcLower - 1e-3 & x2 <= x2CalcUpper + 1e-3))
-  ###!!!Case with a few zero on start, problem with upper. Check intervalUniroot.
+  expect_true(length(z[z< 0])==0)
+  
 })
 
 test_that("timeScale inverse return lower and upper bounds encompassing initial values (with zero rate)", {
@@ -61,7 +60,6 @@ test_that("timeScale inverse return lower and upper bounds encompassing initial 
   
   #Within bounds given some rounding
   expect_true(all(x2 >= x2CalcLower - 1e-3 & x2 <= x2CalcUpper + 1e-3))
-  ###!!!Case with a few zero on start, problem with upper. Check intervalUniroot.
 })
 
 test_that("timeScale give proper values for simple model (constant interpolation)", {
@@ -122,3 +120,4 @@ test_that("Composition of timeScale direct and inverse return initial values (no
   #Equality given some rounding
   expect_equal(x2, x2Calc, tolerance=1e-3)
 })
+

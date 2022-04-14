@@ -12,7 +12,7 @@ composeModel(model, condModel, param = list(), control = list())
 \item{condModel}{\code{list} of functions that represent conditions variables in function of time (\code{v}) as the only argument, and to be substitued into the variables of the model. The \code{names} attribute of the list correspond to the variable names.}
 }
 \value{
-Return a new function that only depend on time (represented as \code{x}).
+Return a new function that only depend on time (represented as \code{time}).
 }
 \description{
 Compose the function of the model and the functions representing its variables, condModel a list a function  reprensenting each variables.

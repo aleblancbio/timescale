@@ -2,7 +2,7 @@
 #' @description Compose the function of the model and the functions representing its variables, condModel a list a function  reprensenting each variables.
 #' @param condModel \code{list} of functions that represent conditions variables in function of time (\code{v}) as the only argument, and to be substitued into the variables of the model. The \code{names} attribute of the list correspond to the variable names.
 #' @param model \code{character} corresponding to the name of the rate model.
-#' @return Return a new function that only depend on time (represented as \code{x}).
+#' @return Return a new function that only depend on time (represented as \code{time}).
 #' @details Note that \code{condModel} must correspond to a list of functions and not of function names. This is safer as these functions are usually not predefined, but generated using \code{interpolateCond}.
 #' @export
 #' @examples
@@ -32,12 +32,12 @@ setMethod("composeModel", signature(model = "character", condModel = "list"), fu
   }
   
   #Generate the composite function of the model and its variables in function of time (x).
-  compFunction <- function(x) {
+  compFunction <- function(time) {
     #Define condModel list as functions of the present function
     condModelCall <- list()
     for (i in names(condModel)){
-      condModelCall[[i]] <- do.call(condModel[[i]], args = list(v=x))
-      #condModelCall[[i]] <- do.call(condModel[[i]], args = list(x=x))
+      condModelCall[[i]] <- do.call(condModel[[i]], args = list(v=time))
+      #condModelCall[[i]] <- do.call(condModel[[i]], args = list(x=time))
     }
     #Pass condModel functions as variables in model
     args = c(condModelCall, list(param = param, control = control))
