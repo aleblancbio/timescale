@@ -30,9 +30,7 @@ setMethod("timeShift", signature(x1 = "numeric", scaledPeriod = "numeric", model
   validityScaledPeriod(x1 = x1, scaledPeriod = scaledPeriod, model = model, conditions = conditions, param = param, interpolation = interpolation)
   
   ##Validity check on interpolation method
-  if(!(interpolation %in% c("constant"))){
-    stop("wrong interpolation method")
-  }
+  validityElement(interpolation,"constant","interpolation")
   
   #Generate functions of rate model and its integral only in function of time
   #timeModelFunction <- timeModel(model = model, conditions = conditions, param = param, control = control, interpolation = interpolation)

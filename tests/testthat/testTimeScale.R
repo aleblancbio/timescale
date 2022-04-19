@@ -121,3 +121,6 @@ test_that("Composition of timeScale direct and inverse return initial values (no
   expect_equal(x2, x2Calc, tolerance=1e-3)
 })
 
+test_that("timeScale can deal with NA in conditions", {
+
+})

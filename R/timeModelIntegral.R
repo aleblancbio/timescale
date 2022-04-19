@@ -30,7 +30,7 @@ setMethod("timeModelIntegral", signature(model = "character", conditions = "data
   #Validity checks
   validityModel(model)
   validityConditions(conditions, model)
-  
+
   if(interpolation %in% c("constant")){
     #Constant case (integral correspond to linear interpolation of the integral/sum at conditions time)
       timeModelFunction <- timeModel(model = model, conditions = conditions, param = param, control = control, interpolation = interpolation)

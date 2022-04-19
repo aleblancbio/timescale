@@ -80,7 +80,7 @@ We will first load libraries and generate random hourly temperature data, with t
 library(timescale)
 library(ggplot2)
 set.seed(6)
-time <- seq(0, 5, by = 1/24)
+time <- seq(0, 30, by = 1/24)
 temp <- 5*sin(2*pi*time) + rnorm(length(time), mean = 10, sd = 2.5)
 conditions <- data.frame(time = time, temp = temp)
 ```
@@ -105,7 +105,6 @@ model <- "modelLinear"
 param <- list(T0 = 10, a = 1)
 ```
 
-
 ### Function timeScale
 We then use the `timeScale` function to compute the development (`z2`) between a reference 'x1' and some other time 'x2' (it can differ from the one of `conditions`).
 
@@ -119,11 +118,11 @@ z2
 For the inverse operation, we simply have to use the option `inverse = TRUE` and specify entries as development instead of time. For this example, we would calculate `z2` back into `x2` using zero as a reference for `z1` (since `x1` and `z1` both coincide at zero).
 ```{r}
 z1 <- rep(0,length.out = 6)
-x2CalcLower <- timeScale(z1, z2, model = model, conditions = conditions, param = param, inverse = TRUE, assignConstant = "lower")
+x2CalcLower <- timeScale(z1, z2, model = model, conditions = conditions, param = param, inverse = TRUE, assignConstant = c("lower", "lower"))
 x2CalcLower
 ```
 
-Note that `x2Calc` differs from `x2`, when the development rate defined by the model is zero for some period. As the corresponding scaled time `z2` remain constant over that period of time, the scaling function is not invertible. What the inverse option calculates is one of the time interval limits associated to the scaled time `z2`. With the option `assignConstant = "lower"` (the default), the function returns the first time the organism reached the specified development (`z2`), while `assignConstant = "upper"` make the function return the last occurrence.
+Note that `x2Calc` differs from `x2`, when the development rate defined by the model is zero for some period. As the corresponding scaled time `z2` remain constant over that period of time, the scaling function is not invertible. What the inverse option calculates is one of the time interval limits associated to the scaled time `z2`. With the option `assignConstant = c("lower", "lower")` (the default), the function returns the first time the organism reached the specified development (`z2`), while `assignConstant = c("upper", "upper")` make the function return the last occurrence.
 
 WARNING: Numerical problems persist with the inverse (and `timeShift`) in presence of null rate, you should avoid to use the functions in such context until it is fixed.
 
