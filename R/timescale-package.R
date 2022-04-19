@@ -4,7 +4,7 @@
 #' \cr\cr
 #' The principal functions of the package are \code{timeScale} and \code{timeShift}, no other function require to be explicitly called.
 #' The function \code{timeScale} evaluate the time elapsed between two bounds (\code{x1}, \code{x2}) into a scaled domain, or perform the back-transformation. 
-#' The function \code{timeShift} estimate the upper bounds \code{x2} that would correspond to a specified period elapsed in the scaled domain. 
+#' The function \code{timeShift} estimate the time \code{x2} that would correspond to a specified period elapsed in the scaled domain, given a reference time \code{x1}. 
 
 #' @section Installation and help:
 #' The package can be installed from github by entering the following command lines in R: \cr

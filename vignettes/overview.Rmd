@@ -70,7 +70,7 @@ Although `model` and `conditions` are not objects belonging to a defined class (
 
 - 'model' is a function defined by the user that return the rate at which time elapse in the new scale. It takes variables, model parameters (under a `list` named `param`) and optional arguments (under a list named `control`). All arguments of the model that is not either `param` or `control` are considered variables; therefore, any number of variables and any name can be chosen (with the exception of the word `time`). The model should accept numeric vectors of the same length as variable and return a value greater or equal to zero. Some models are already included in the package and can serve as template (`modelGDD`, `modelLinear`, `modelBriere1999`).
 
-- 'conditions'  is a `data.frame` that contains one column named `time` and other columns with the same name as the model variables. It represents the evolution of the model variable through time. Checks are made when calling `timeScale` and `timeShift` to ensure `conditions` and the `model` are compatibles. Other checks are made on `conditions`, including `time` must be a strictly increasing `numeric` vector containing `0`. Units of times must simply match the definition of the model, with day usually being used.
+- 'conditions'  is a `data.frame` that contains one column named `time` and other columns with the same name as the model variables. It represents the evolution of the model variable through time. Checks are made when calling `timeScale` and `timeShift` to ensure `conditions` and the `model` are compatibles. Other checks are made on `conditions`, including `time` must be a strictly increasing `numeric` vector. Units of times must simply match the definition of the model, with day usually being used.
 
 ## Examples
 ### Specifying conditions and model
@@ -114,6 +114,8 @@ x2 = seq(0,5,length.out = 6)
 z2 <- timeScale(x1, x2, model = model, conditions = conditions, param = param)
 z2
 ```
+
+The function timeScale integrates the model over time, which requires to define conditions variables between measurements. For the sake of simplicity and performance, conditions values are considered constant in time until the next measurement. This should be reasonable in most context as meteorological data now tend to be available at short intervals.
 
 For the inverse operation, we simply have to use the option `inverse = TRUE` and specify entries as development instead of time. For this example, we would calculate `z2` back into `x2` using zero as a reference for `z1` (since `x1` and `z1` both coincide at zero).
 ```{r}

@@ -9,7 +9,7 @@
 #' @param interpolation \code{character} corresponding to the name of the interpolating method for conditions. Available methods only include \code{constant} at the moment and is the default value.
 #' @param assignConstant \code{character} indicating how to assign scaled time to time when it remains constant on a time interval. Choices are \code{lower} and \code{upper} for both end of the interval.
 #' @return Return a vector of the same length as \code{x1} and \code{x2} representing the scaled time elapsed between those values.
-#' @details Note that \code{x1} and the calculated \code{x2} must be in the time range provided by conditions. See the details section of \code{timescale} for the structure of \code{conditions} and \code{model}.
+#' @details Note that \code{x1} and the calculated \code{x2} must be in the time range provided by conditions. See the details section of \code{timescale} for the structure of \code{conditions} and \code{model} and the calculation.
 #' @import stringr
 #' @export
 #' @examples
