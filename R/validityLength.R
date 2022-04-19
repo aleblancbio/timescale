@@ -1,10 +1,6 @@
 #' @title Validate if proper length
 #' @description Check that a vector \code{x} is of specified length (\code{value}) and return an error otherwise.
-<<<<<<< HEAD
 #' @inheritParams base::length
-=======
-#' @inheritParams length
->>>>>>> fec69c8c9f722a15693ea88142591caeaf1e106d
 #' @param name variable name to return in the error message
 #' @return Return \code{TRUE} if the condition is respected and an error otherwise.
 #' @export
@@ -12,7 +8,7 @@
 #' x <- c(1,2,3)
 #' validityLength(x, 3, name = "w")
 #' validityLength(x, 4, name = "w")
-
+#'
 setGeneric("validityLength", function(x, value, name) standardGeneric("validityLength"))
 setMethod("validityLength", signature(name = "character"), function(x, value, name) {
   

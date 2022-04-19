@@ -23,4 +23,5 @@ Check that a vector \code{x} is of specified length (\code{value}) and return an
 x <- c(1,2,3)
 validityLength(x, 3, name = "w")
 validityLength(x, 4, name = "w")
+
 }
