@@ -33,10 +33,8 @@
 setGeneric("timeScale", function(x1, x2, model , conditions, param = list(), control = list(), interpolation = "constant", inverse = FALSE, assignConstant = c("lower", "lower")) standardGeneric("timeScale"))
 setMethod("timeScale", signature(x1 = "numeric", x2 = "numeric", model = "character", conditions = "data.frame"), function(x1, x2, model, conditions, param, control, interpolation, inverse, assignConstant) {
 
-  #Validity check on interpolation method
-  if(!(interpolation %in% c("constant"))){
-    stop("wrong interpolation method")
-  }
+  ##Validity check on interpolation method
+  validityElement(interpolation,"constant","interpolation")
   
   #Generate functions of rate model and its integral only in function of time
   timeModelFunction <- timeModel(model = model, conditions = conditions, param = param, control = control, interpolation = interpolation)
@@ -53,14 +51,8 @@ setMethod("timeScale", signature(x1 = "numeric", x2 = "numeric", model = "charac
  
   }else{
     ##Validity checks on assignConstant (proper length and values)
-    if(length(assignConstant) == 2){
-      #Check for possible values
-      if(!(all(assignConstant %in% c("lower", "upper")))){
-        stop("assignConstant values must be lower or upper")
-      }
-    }else{
-      stop("assignConstant must be of length 2")
-    }
+    validityElement(assignConstant, c("lower", "upper"), "assignConstant")
+    validityLength(assignConstant, 2, "assignConstant")
 
     ##Calculate time difference z2-z1 with scaled time x1 as reference, from scaled time x1 and x2
     z0 <- rep(min(conditions$time), length(x1))

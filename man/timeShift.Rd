@@ -48,8 +48,6 @@ model <- "modelLinear"
 param = list(a = 1, T0 = 10)
 x1 = seq(1,10,length.out = 10)
 scaledPeriod = rep(10,10)
-control = list()
-inverse = FALSE
 
 #Calculating x2 time values
 x2 <- timeShift(x1, scaledPeriod = scaledPeriod, model = model, conditions = conditions, param = param)

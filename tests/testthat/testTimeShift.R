@@ -74,3 +74,7 @@ test_that("timeScale inverse return lower and upper bounds encompassing initial 
   expect_true(all(x2 >= x2CalcLower - 1e-3 & x2 <= x2CalcUpper + 1e-3))
   #Seems not to work with integrate (timeScale estimate seem to be inconsistent as bounds change)
 })
+
+test_that("timeShift can deal with NA in conditions", {
+  
+})
