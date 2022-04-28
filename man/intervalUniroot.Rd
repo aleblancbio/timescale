@@ -9,7 +9,6 @@ intervalUniroot(
   lower,
   upper,
   correction = "lower",
-  gradient = NULL,
   tol = .Machine$double.eps^0.5,
   ...
 )
@@ -23,13 +22,9 @@ intervalUniroot(
 
 \item{correction}{a \code{character} indicating to which value of the interval correct the root, either \code{lower}, \code{upper} or \code{none}. The latter return the same value as \code{uniroot}.}
 
-\item{gradient}{a function corresponding to the derivative of f (optional)}
-
 \item{tol}{\code{numeric}, the absolute tolerance on the argument of \code{f}, specifying when to stop searching for limits of the interval. By default, correspond to the square root of the machine's precision.}
 
 \item{...}{additional arguments to pass to the function \code{f} or the function \code{uniroot}.}
-
-\item{args}{arguments to pass to the function \code{f}}
 }
 \value{
 Return only the root (a constant), other components returned by \code{uniroot} are dismissed.
@@ -50,23 +45,13 @@ g <- function(x, a, delta){
  return(y)  
 }
 
-gradient <- function(x, a, delta){
- y <- rep(0,length = length(x))
- y[x <= a - delta] <- 1
- y[x >= a + delta] <- 1
- return(y)  
-}
-
 #Define parameters and range on which the function is known to be constant
 a <- 5
 delta <- 1
-lower = - 10
-upper = 10
-correction = "lower"
-intervalUniroot(g, lower, upper, correction = "lower", tol = 1e-4, a = a, delta = delta)
-intervalUniroot(g, lower, upper, correction = "upper", tol = 1e-4, a = a, delta = delta)
+lower <- -10
+upper <- 10
+intervalUniroot(g, lower, upper, correction = "lower", a = a, delta = delta)
 intervalUniroot(g, lower, upper, correction = "upper", a = a, delta = delta)
-intervalUniroot(g, lower, upper, correction = "upper", a = a, gradient = gradient, delta = delta)
 uniroot(g, lower = lower, upper = upper, a = a, delta = delta)$root
 
 }

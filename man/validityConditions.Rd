@@ -22,7 +22,8 @@ Variables in the model are all function inputs excluding \code{param} and \code{
 (1) column names include \code{time};
 (2) column names exclude \code{param} and \code{control}, as those are reserved terms of the model function;
 (3) variable names are the same in the model and conditions;
-(4) conditions time have unique and increasing values with no \code{NA}.
+(4) conditions time have unique and increasing values
+(5) conditions time and variables contains no \code{NA}.
 }
 \examples{
 conditions <- data.frame(time = seq(0,30,length.out = 10), temp = rnorm(10, 10, 5))

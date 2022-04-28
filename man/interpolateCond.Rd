@@ -22,14 +22,13 @@ The function is a wrapper of \code{approxfun}.
 }
 \examples{
 #Example of a call with two variables
-conditions <- data.frame(time = seq(0,30,length.out = 10), temp = rnorm(10, 10, 5), hr = rnorm(10, 10, 5))
-f <- interpolateCond(conditions, method = "linear")
+conditions <- data.frame(time = seq(0,30,length.out = 10), temp = rnorm(10, 10, 5), rh = rnorm(10, 10, 5))
+f <- interpolateCond(conditions, method = "constant")
 f
 #Plotting the result for temp 
 plot(conditions$time,conditions$temp)
 x <- seq(0,30,length.out = 100)
 lines(x,f$temp(x), lty = 1)
-
 f <- interpolateCond(conditions, method = "spline")
 #Plotting the result for temp 
 plot(conditions$time,conditions$temp)
