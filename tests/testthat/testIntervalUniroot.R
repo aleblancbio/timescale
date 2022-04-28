@@ -1,4 +1,4 @@
-test_that("intervalUniroot returns specified bound (continuous, no gradient)", {
+test_that("intervalUniroot returns specified bound (continuous)", {
   #Define a function that reach zero at a +- delta
   g <- function(x, a, delta){
    y <- rep(0,length = length(x))
@@ -14,22 +14,24 @@ test_that("intervalUniroot returns specified bound (continuous, no gradient)", {
   lower = - 10
   upper = 10
   
-  #Without gradient provided
+  #Lower bound
   y <- intervalUniroot(g, lower, upper, correction = "lower", a = a, delta = delta)
   answer <- (a - delta)
   expect_equal(y, answer, tolerance=1e-3)
   
+  #Upper bound
   y <- intervalUniroot(g, lower, upper, correction = "upper", a = a, delta = delta)
   answer <- (a + delta)
   expect_equal(y, answer, tolerance=1e-3)
  
+  #Original
   y <- intervalUniroot(g, lower, upper, correction = "none", a = a, delta = delta)
   answer <-   uniroot(g, lower = lower, upper = upper, a = a, delta = delta)$root
   expect_equal(y, answer, tolerance=1e-3)
   
 })
 
-test_that("intervalUniroot returns specified bound (step function, no gradient)", {
+test_that("intervalUniroot returns specified bound (step function)", {
   #Define a function that reach zero at a +- delta
   g <- function(x, a, delta){
     y <- rep(0,length = length(x))
@@ -45,15 +47,17 @@ test_that("intervalUniroot returns specified bound (step function, no gradient)"
   lower = - 10
   upper = 10
   
-  #Without gradient provided
+  #Lower bound
   y <- intervalUniroot(g, lower, upper, correction = "lower", a = a, delta = delta)
   answer <- (a - delta)
   expect_equal(y, answer, tolerance=1e-3)
   
+  #Upper bound
   y <- intervalUniroot(g, lower, upper, correction = "upper", a = a, delta = delta)
   answer <- (a + delta)
   expect_equal(y, answer, tolerance=1e-3)
   
+  #Original
   y <- intervalUniroot(g, lower, upper, correction = "none", a = a, delta = delta)
   answer <-   uniroot(g, lower = lower, upper = upper, a = a, delta = delta)$root
   expect_equal(y, answer, tolerance=1e-3)
@@ -76,15 +80,17 @@ test_that("intervalUniroot returns specified bound (unique root)", {
   lower = - 10
   upper = 10
   
-  #Without gradient provided
+  #Lower bound
   y <- intervalUniroot(g, lower, upper, correction = "lower", a = a, delta = delta)
   answer <- (a - delta)
   expect_equal(y, answer, tolerance=1e-3)
   
+  #Upper bound
   y <- intervalUniroot(g, lower, upper, correction = "upper", a = a, delta = delta)
   answer <- (a + delta)
   expect_equal(y, answer, tolerance=1e-3)
   
+  #Original
   y <- intervalUniroot(g, lower, upper, correction = "none", a = a, delta = delta)
   answer <-   uniroot(g, lower = lower, upper = upper, a = a, delta = delta)$root
   expect_equal(y, answer, tolerance=1e-3)

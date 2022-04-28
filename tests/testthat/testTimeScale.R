@@ -24,22 +24,22 @@ test_that("Composition of timeScale direct and inverse return initial values (ti
   param = list(a = 1, T0 = 10)
   
   #Initial time
-  x1 = rep(10,length.out = 10)
+  x1 = rep(10,length.out = 10) #(new ref)
   x2 = seq(11,20,length.out = 10)
   
   #Scaled time
-  y1 <- rep(0,10,length.out = 10)
+  y1 <- rep(0,length.out = 10) #(new ref)
   y2 <- timeScale(x1, x2, model = model, conditions = conditions, param = param)
   
   #Scaling back to original time
-  x2Calc <- timeScale(y1, y2, model = model, conditions = conditions, param = param, inverse = TRUE)
+  x2Calc <- x1 + timeScale(y1, y2, model = model, conditions = conditions, param = param, inverse = TRUE)
   
   #Equality given some rounding
   expect_equal(x2, x2Calc, tolerance=1e-3)
 })
 
 test_that("timeScale returns increasing values (with zero rate)", {
-  set.seed(6)
+  #set.seed(6)
   conditions <- data.frame(time = seq(0,265,length.out = 265*24), temp = rnorm(10, 10, 5))
   model <- "modelLinear"
   param = list(a = 1, T0 = 10)
@@ -58,7 +58,7 @@ test_that("timeScale returns increasing values (with zero rate)", {
 })
 
 test_that("timeScale inverse return lower and upper bounds encompassing initial values (with zero rate)", {
-  set.seed(6)
+  #set.seed(6)
   conditions <- data.frame(time = seq(0,30,length.out = 10), temp = rnorm(10, 10, 5))
   model <- "modelLinear"
   param = list(a = 1, T0 = 10)
@@ -80,7 +80,7 @@ test_that("timeScale inverse return lower and upper bounds encompassing initial 
   expect_true(all(x2 >= x2CalcLower - 1e-3 & x2 <= x2CalcUpper + 1e-3))
 })
 
-test_that("timeScale give proper values for simple model (constant interpolation)", {
+test_that("timeScale example with modelLinear (proper values)", {
   n = 21
   conditions <- data.frame(time = seq(0,20,length.out = n), temp = seq(0, 20,length.out = n))
   model <- "modelLinear"
@@ -99,7 +99,7 @@ test_that("timeScale give proper values for simple model (constant interpolation
   expect_equal(y2, answer, tolerance=1e-3)
 })
 
-test_that("timeScale example with modelGDD", {
+test_that("timeScale example with modelGDD (proper values)", {
   n = 21
   conditions <- data.frame(time = seq(0,20,length.out = n), Tmin = seq(0, 20,length.out = n)-1, Tmax = seq(0, 20,length.out = n)+1)
   model <- "modelGDD"
@@ -119,26 +119,18 @@ test_that("timeScale example with modelGDD", {
   expect_equal(y2, answer, tolerance=1e-3)
 })
 
-test_that("Composition of timeScale direct and inverse return initial values (non zero rate)", {
-  conditions <- data.frame(time = seq(0,365,length.out = 100), temp = 20 + rnorm(10, 10, 5))
+
+test_that("timeScale can deal with NA in conditions", {
+  conditions <- data.frame(time = seq(0,30,length.out = 10), temp = 20 + rnorm(10, 10, 5))
+  conditions$temp[3] <- NA
   model <- "modelLinear"
   param = list(a = 1, T0 = 10)
   
   #Initial time
-  x1 = rep(0,10,length.out = 100)
-  x2 = seq(11,20,length.out = 100)
+  x1 = rep(0,length.out = 10)
+  x2 = seq(11,20,length.out = 10)
   
-  #Scaled time
-  y1 <- rep(0,10,length.out = 100)
-  y2 <- timeScale(x1, x2, model = model, conditions = conditions, param = param)
-  
-  #Scaling back to original time
-  x2Calc <- timeScale(y1, y2, model = model, conditions = conditions, param = param, inverse = TRUE)
-  
-  #Equality given some rounding
-  expect_equal(x2, x2Calc, tolerance=1e-3)
-})
-
-test_that("timeScale can deal with NA in conditions", {
-
+  #Scaled time y2 (expect error)
+  y1 <- rep(0,10,length.out = 10)
+  expect_error(timeScale(x1, x2, model = model, conditions = conditions, param = param))
 })

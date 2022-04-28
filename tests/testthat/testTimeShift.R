@@ -76,5 +76,15 @@ test_that("timeScale inverse return lower and upper bounds encompassing initial 
 })
 
 test_that("timeShift can deal with NA in conditions", {
+  conditions <- data.frame(time = seq(0,30,length.out = 10), temp = 30 + rnorm(10, 10, 5))
+  conditions$temp[3] <- NA
+  model <- "modelLinear"
+  param = list(a = 1, T0 = 10)
   
+  #Initial time
+  x1 = rep(0,10,length.out = 10)
+  scaledPeriod = rep(10,10)
+  
+  #Compute x2 scaled period (expect error)
+  expect_error(timeShift(x1, scaledPeriod = scaledPeriod, model = model, conditions = conditions, param = param))
 })
