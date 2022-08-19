@@ -9,7 +9,7 @@
 #' @param interpolation \code{character} corresponding to the name of the interpolating method for conditions. Available methods only include \code{constant} at the moment and is the default value.
 #' @param inverse \code{logical} indicating if the inverse operation (i.e. scaled time to time transformation) should be performed.
 #' @param assignConstant \code{character} vector of length 2 indicating how to assign scaled time \code{x1} and \code{x2} to time when it remains constant on a time interval. Choices are \code{lower} and \code{upper} for both end of the interval. The default values are \code{assignConstant = c("lower","lower")}.
-#' @return Return a vector of the same length as \code{x1} and \code{x2} representing the scaled time elapsed between those values.
+#' @return Return a vector of the same length as \code{x1} and \code{x2} representing the scaled time (or time if \code{inverse = TRUE}) elapsed between those values.
 #' @details 
 #' Both \code{x1} and \code{x2} must be in the time range provided by conditions. \cr \cr
 #' \code{model} is a function defined by the user that return the rate at which time elapse in the new scale. It takes variables, model parameters (\code{param} as a \code{list}) and optional arguments (under a \code{list} named \code{control}). All arguments of the model that is not either \code{param} or \code{control} are considered variables; therefore, any number of variables and any name can be chosen, with the exception of the word \code{time}). The model should accept numeric vectors of the same length as variable and return a value greater or equal to zero. Some models are already included in the package and can serve as template (\code{modelGDD}, \code{modelLinear}, \code{modelBriere1999}). \cr \cr

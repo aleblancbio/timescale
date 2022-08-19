@@ -1,8 +1,3 @@
-# timescale package overview
-**Alexandre Leblanc**
-
-**2022-03-24**
-
 ## Package Installation
 
 The package can be installed from github by entering the following
@@ -14,9 +9,9 @@ command lines in R.
 ## Get information on the package
 
 This file give an overview of the package and is available from main
-folder of the GitHub project as well as a vignette to be available once the 
-package is installed. The vignette can be accessed through the following 
-command lines:
+folder of the GitHub project. The information has also been replicated
+as a vignette, to be available once the package is installed. The
+vignette can be accessed through the following command lines:
 
     library(timescale)
     browseVignettes("timescale")
@@ -92,7 +87,7 @@ Although `model` and `conditions` are not objects belonging to a defined
 class (such as in S4 and R6); they must however respect some structure
 and conditions to be accepted by `timeScale` and `timeShift`.
 
--   ‘model’ is a function defined by the user that return the rate at
+-   `model` is a function defined by the user that return the rate at
     which time elapse in the new scale. It takes variables, model
     parameters (under a `list` named `param`) and optional arguments
     (under a list named `control`). All arguments of the model that is
@@ -104,36 +99,38 @@ and conditions to be accepted by `timeScale` and `timeShift`.
     can serve as template (`modelGDD`, `modelLinear`,
     `modelBriere1999`).
 
--   ‘conditions’ is a `data.frame` that contains one column named `time`
+-   `conditions` is a `data.frame` that contains one column named `time`
     and other columns with the same name as the model variables. It
     represents the evolution of the model variable through time. Checks
     are made when calling `timeScale` and `timeShift` to ensure
     `conditions` and the `model` are compatibles. Other checks are made
     on `conditions`, including `time` must be a strictly increasing
-    `numeric` vector containing `0`. Units of times must simply match
-    the definition of the model, with day usually being used.
+    `numeric` vector. Units of times must simply match the definition of
+    the model, with day usually being used.
 
 ## Examples
 
 ### Specifying conditions and model
 
-We will first load libraries and generate random hourly temperature
-data, with time represented in days as `numeric`.
+We will first load libraries and generate random hourly temperature data
+for a month, with time represented in days as `numeric`.
 
     library(timescale)
     library(ggplot2)
-    set.seed(6)
-    time <- seq(0, 5, by = 1/24)
-    temp <- 5*sin(2*pi*time) + rnorm(length(time), mean = 10, sd = 2.5)
+    set.seed(11)
+    time <- seq(0, 30, by = 1/24)
+    temp <- 0.15*time + 5*sin(2*pi*time) + rnorm(length(time), mean = 10, sd = 2.5)
     conditions <- data.frame(time = time, temp = temp)
 
-Plotting the data we have (not shown in README.md):
+Plotting the data we have:
 
     p<-ggplot(conditions, aes(x=time, y=temp)) + 
       geom_point() +
       geom_line() +
       theme_classic()
     p
+
+![](C:/Users/alebl/AppData/Local/Temp/RtmpecTEt9/preview-411412b522f9.dir/overview_files/figure-markdown_strict/unnamed-chunk-3-1.png)
 
 For the model, we use the function called `modelLinear`, already
 included in the package. The function linearly accumulate development at
@@ -157,68 +154,116 @@ function.
     #>   
     #>   return(rate)
     #> }
-    #> <bytecode: 0x0000000019dcb838>
+    #> <bytecode: 0x0000000012d235b0>
     #> <environment: namespace:timescale>
 
 Once we have defined the function, we can simply refer to the function
-name. Here we will specify also `T0` to 10<sup>∘</sup>C and set the
-normalizing constant `a` to 1 over the total degree day to complete
-development (we set it to 10 degree days); a development of 1 then
+name. Here, we will also arbitrarily set the base temperature `T0 = 10`
+<sup>∘</sup>C and the normalizing constant `a = 1/GDD`, with the total
+degree day to complete development `GDD = 25`; a development of 1 then
 correspond to its completion. Alternatively, we could have chosen
 `a = 1` in order to accumulate degree days.
 
     model <- "modelLinear"
-    param <- list(T0 = 10, a = 1)
+    param <- list(T0 = 10, a = 1/25)
 
 ### Function timeScale
 
 We then use the `timeScale` function to compute the development (`z2`)
-between a reference ‘x1’ and some other time ‘x2’ (it can differ from
+between a reference `x1` and some other time `x2` (it can differ from
 the one of `conditions`).
 
-    x1 = rep(0,length.out = 6)
-    x2 = seq(0,5,length.out = 6)
+    x1 = rep(0,length.out = 7)
+    x2 = seq(0,30, by = 5)
     z2 <- timeScale(x1, x2, model = model, conditions = conditions, param = param)
     z2
-    #> [1] 0.000000 2.032425 4.075210 5.503463 7.787138 9.103891
+    #> [1] 0.0000000 0.3681821 0.9185467 1.4634378 2.1620458 2.9934984 3.9490163
 
-For the inverse operation, we simply have to use the option
-`inverse = TRUE` and specify entries as development instead of time. For
-this example, we would calculate `z2` back into `x2` using zero as a
-reference for `z1` (since `x1` and `z1` both coincide at zero).
-
-    z1 <- rep(0,length.out = 6)
-    x2CalcLower <- timeScale(z1, z2, model = model, conditions = conditions, param = param, inverse = TRUE, assignConstant = "lower")
-    x2CalcLower
-    #> [1] 0.0000000 0.9975504 2.0003153 3.0225882 3.9559027 5.0000000
-
-Note that `x2Calc` differs from `x2`, when the development rate defined
-by the model is zero for some period. As the corresponding scaled time
-`z2` remain constant over that period of time, the scaling function is
-not invertible. What the inverse option calculates is one of the time
-interval limits associated to the scaled time `z2`. With the option
-`assignConstant = "lower"` (the default), the function returns the first
-time the organism reached the specified development (`z2`), while
-`assignConstant = "upper"` make the function return the last occurrence.
-
-WARNING: Numerical problems persist with the inverse (and `timeShift`)
-in presence of null rate, you should avoid to use the functions in such
-context until it is fixed.
+The function `timeScale` integrates the model over time, which requires
+to define conditions variables between measurements. For the sake of
+simplicity and performance, conditions values are considered constant in
+time until the next measurement. This should be reasonable in most
+context as meteorological data now tend to be available at short
+intervals.
 
 ### Function timeShift
 
-Function `timeShift` is similiar to the inverse operation of timeScale,
-and calculate the time `x2`, from a reference `x1`, after which a
-specific period (`scaledPeriod`) has elapsed in the scaled domain. Both
-`x1` and `scaledPeriod` are vectors. Here, we set various initial time
-(`x1`) but set the period as a constant (reaching 1). The resulting
-vector correspond to the end of development of each cohort.
+Function `timeShift` calculates the time `x2`, from a reference `x1`,
+after which a specific period (`scaledPeriod`) has elapsed in the scaled
+domain. Both `x1` and `scaledPeriod` are vectors. Here, we set different
+initial time (`x1`) for a period of one. The resulting vector correspond
+to the end of development of different cohorts.
 
-    x1 = seq(0,3,length.out = 6)
-    scaledPeriod = rep(1,length.out = 6)
-    x2 <- timeShift(x1, scaledPeriod = scaledPeriod, model = model, conditions = conditions, param = param)
+    x1 = seq(0,20,length.out = 5)
+    scaledPeriod = rep(1,length.out = 5)
+
+    x2Lower <- timeShift(x1, scaledPeriod = scaledPeriod, model = model, conditions = conditions, param = param, assignConstant = "lower")
+    x2Lower
+    #> [1] 10.31953 13.97435 18.14138 21.50734 25.99118
+
+Note that when development rate defined by the model is zero for some
+period, the corresponding scaled time `z2` remain constant over that
+period. In that case, there is no unique value of `x2` that correspond
+to `z2`. The function `timeShift` return one of the time interval limits
+associated to the scaled time `z2` (i.e. either the first or last time
+the organism reached the specified development (`z2`)). The interval
+limit is specified by the option `assignConstant` which can take either
+`"lower"` (default) or `"upper"` as values. In practice, it is however
+unlikely that `z2` is both exactly reached and maintained. Here is a
+case in which we look for the situation.
+
+    x2Problem <- max(conditions$time[conditions$temp <= param$T0])
+    x1Problem <- rep(0,length.out = length(x2Problem))
+    z2Problem <- timeScale(x1Problem, x2Problem, model = model, conditions = conditions, param = param)
+    z2Problem
+    #> [1] 3.932317
+
+    x2Lower <- timeShift(x1Problem, scaledPeriod = z2Problem , model = model, conditions = conditions, param = param, assignConstant = "lower")
+    x2Lower
+    #> [1] 29.83333
+
+    x2Upper <- timeShift(x1Problem, scaledPeriod = z2Problem, model = model, conditions = conditions, param = param, assignConstant = "upper")
+    x2Upper
+    #> [1] 29.875
+
+### Function timeScale (inverse)
+
+For the inverse operation of `timeScale`, we simply have to use the
+option `inverse = TRUE` and specify entries as development instead of
+time. The function compute the time elapsed between bounds `z1` (a
+reference) and `z2`, provided in the scaled domain. From the first
+example, we would calculate `z2` back into `x2`, using zero as a
+reference for `z1` (since `x1` and `z1` both coincide at zero).
+
+    z1 <- rep(0,length.out = 7)
+    x2CalcLower <- timeScale(z1, z2, model = model, conditions = conditions, param = param, inverse = TRUE, assignConstant = c("lower", "lower"))
+    x2CalcLower
+    #> [1]  0.000000  4.666667  9.999999 15.000053 20.000006 24.999985 30.000000
+
+The calculation is really similar to `timeShift`, and time associated to
+`z1` and `z2` are not always unique if they fall at moments when the
+development rate is zero. The situation is more likely to happen for
+`timeScale` inverse than for `timeShift`, mostly because the reference
+`z1` is set by the user, although one can also choose it to avoid the
+problem. The function require to specify `assignConstant` for both `z1`
+and `z2`, with the default value `assignConstant = c("lower", "lower")`.
+Note that the original values `x2` is always confined between
+estimations from `assignConstant = c("upper", "lower")` and
+`assignConstant = c("lower", "upper")` (within some numerical error).
+
+    z1 <- rep(0,length.out = 7)
+    x2CalcIn <- timeScale(z1, z2, model = model, conditions = conditions, param = param, inverse = TRUE, assignConstant = c("upper", "lower"))
+    x2CalcIn 
+    #> [1] -0.04166666  4.62500000  9.95833235 14.95838589 19.95833930 24.95831813
+    #> [7] 29.95833334
+
     x2
-    #> [1] 0.265939 1.216326 1.529545 2.270528 3.277050 3.301795
+    #> [1]  0  5 10 15 20 25 30
+
+    x2CalcOut <- timeScale(z1, z2, model = model, conditions = conditions, param = param, inverse = TRUE, assignConstant = c("lower", "upper"))
+    x2CalcOut
+    #> [1]  0.04166666  5.00000000  9.99999902 15.00005255 20.00000596 24.99998480
+    #> [7] 30.00000000
 
 ## Package structure
 
@@ -226,21 +271,29 @@ This section is not required to use the package, but will help
 understand the mechanics behind.
 
 -   `timeScale` and `timeShift` both start by performing validity
-    checks, which are encapsulated in functions with name starting by
+    checks, which are encapsulated in functions with a name starting by
     validity (`validityConditions`, `validityModel`,
-    `validityScaledPeriod`, `validityScaledTime`, `validityTime`).
+    `validityScaledPeriod`, `validityTime`).
 -   For the direct `timeScale`:
     -   `conditions` variables are interpolated using `interpolateCond`,
-        which return a list of functions associated to each variable. At
-        the moment, only constant interpolation is possible, but other
-        methods are planned for future versions.
+        which return a list of functions describing each variable in
+        function of time. At the moment, only constant interpolation is
+        possible, which only require evaluation at conditions time.
+        However, the approach allows to incorporate more easily other
+        interpolation methods in the future.
     -   A composite model function is made by substituting the temporal
         response of variables (the interpolation of conditions) into
         model variables. The resulting model is a function depending
         only on time.
-    -   The composite model is integrated between two time bounds (`x1`
-        and `x2`). They can be any values in the range defined by
-        conditions.
+    -   The composite model (available from `timeModel`) is integrated
+        between two time bounds (`x1` and `x2`), using
+        `timeModelIntegral`. They can be any values in the range defined
+        by conditions.
+    -   In the case of constant interpolation, `timeModelIntegral`
+        correspond to an analytical integration. The function
+        `timeModel` compute once the summation of development at
+        conditions time, the function `timeModelIntegral` simply refer
+        to the the linear interpolation of this function.
 -   For the inverse option of `timeScale`:
     -   Models usually can return zero values, the rate therefore cannot
         be inverted before integration.
@@ -251,7 +304,7 @@ understand the mechanics behind.
     -   The idea is to find at which time, the time elapsed in the
         scaled domain (calculated by the function `timeScale`) would
         reach a defined period (`scaledPeriod`).
-    -   This can be accomplish by finding the root of the timeScale
+    -   This can be accomplish by finding the root of the `timeScale`
         function minus the objective scaled period.
     -   As the rate is positive, the cumulative function is always
         increasing and there is only one root, or only one interval of
@@ -261,13 +314,11 @@ understand the mechanics behind.
         be associated to a time interval rather than a unique solution.
         In this situation, the function give the choice to return either
         the upper or lower bound. This operation is performed by the
-        function `intervalUniroot`. Time intervals with zero rate are
-        identified from `conditions` by the function `rleInterval`.
+        function `intervalUniroot`.
 
 ## A work in progress
 
-The package is still in development, but a functional version would be
-available soon. Solving numerical problems and improving speed is the
-priority. Functionalities to be added and current issues are detailed in
-the GitHub issues section. Suggestions to improve the package are always
-welcome.
+The package is still in development. Incorporating predefined models and
+improving tests are the priority. Other functionalities to be added and
+current issues are detailed in the GitHub issues section. Suggestions to
+improve the package are always welcome.

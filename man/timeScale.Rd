@@ -36,7 +36,7 @@ timeScale(
 \item{assignConstant}{\code{character} vector of length 2 indicating how to assign scaled time \code{x1} and \code{x2} to time when it remains constant on a time interval. Choices are \code{lower} and \code{upper} for both end of the interval. The default values are \code{assignConstant = c("lower","lower")}.}
 }
 \value{
-Return a vector of the same length as \code{x1} and \code{x2} representing the scaled time elapsed between those values.
+Return a vector of the same length as \code{x1} and \code{x2} representing the scaled time (or time if \code{inverse = TRUE}) elapsed between those values.
 }
 \description{
 Evaluate the time elapsed between two bounds (\code{x1}, \code{x2}) into a scaled domain given a rate model and condtions that represent its variables.
