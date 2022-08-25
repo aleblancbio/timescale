@@ -8,9 +8,8 @@ intervalUniroot(
   f,
   lower,
   upper,
-  constantLower,
-  constantUpper,
-  correction = "constantLower",
+  correction = "lower",
+  tol = .Machine$double.eps^0.5,
   ...
 )
 }
@@ -21,51 +20,38 @@ intervalUniroot(
 
 \item{upper}{the upper end-point of the interval to be searched for the root.}
 
-\item{constantLower}{a vector of lower limits of intervals on which the function is constant.}
+\item{correction}{a \code{character} indicating to which value of the interval correct the root, either \code{lower}, \code{upper} or \code{none}. The latter return the same value as \code{uniroot}.}
 
-\item{constantUpper}{a vector of upper limits of intervals on which the function is constant.}
+\item{tol}{\code{numeric}, the absolute tolerance on the argument of \code{f}, specifying when to stop searching for limits of the interval. By default, correspond to the square root of the machine's precision.}
 
-\item{correction}{a \code{character} indicating to which value of the interval correct the root, either \code{constantLower} or \code{constantUpper}.}
-
-\item{...}{arguments to pass to the function \code{uniroot}.}
+\item{...}{additional arguments to pass to the function \code{f} or the function \code{uniroot}.}
 }
 \value{
 Return only the root (a constant), other components returned by \code{uniroot} are dismissed.
 }
 \description{
-Extend the \code{uniroot} function from \code{stats} by accepting intervals on which the function is constant. The function then return one of the endpoints of the interval.
+Extend the \code{uniroot} function from \code{stats} by accepting intervals on which the function is constant. The function then return one of the endpoints of the interval. Note than the function must be either increasing or decreasing, although not necessarily strictly.
 }
 \details{
-The function does not modify the searching behaviour of \code{uniroot}, but instead correct the root if it falls on a constant interval. Note than intervals are truncated at \code{lower} and \code{upper} if they fall outside the searching interval.
+The function first estimate the root using \code{uniroot}. If the derivative is also zero, the function search for an interval and instead return its lowest or highest value (according to \code{correction}). The algorithm stop when increment on the argument of \code{f} reached absolute tolerance specified by \code{tol}.
 }
 \examples{
 #Define a function that reach zero at a +- delta
-f <- function(x, a, delta){
+g <- function(x, a, delta){
  y <- rep(0,length = length(x))
  y[x <= a - delta] <- x[x <= a - delta] - (a - delta)
  y[x >= a + delta] <- x[x >= a + delta] - (a + delta)
  
  return(y)  
 }
+
 #Define parameters and range on which the function is known to be constant
 a <- 5
 delta <- 1
-constantLower <- (a - delta)
-constantUpper <- (a + delta)
-lower = - 10
-upper = 10
-correction = "constantLower"
-intervalUniroot(f, lower, upper, constantLower, constantUpper, correction = correction, a = a, delta = delta)
-
-correction = "constantUpper"
-intervalUniroot(f, lower, upper, constantLower, constantUpper, correction = correction, a = a, delta = delta)
-
-correction = "constantUpper"
-lower = 4.5
-upper = 5.5
-intervalUniroot(f, lower, upper, constantLower, constantUpper, correction = correction, a = a, delta = delta)
-
-uniroot(f, lower = lower, upper = upper, a = a, delta = delta)$root
-
+lower <- -10
+upper <- 10
+intervalUniroot(g, lower, upper, correction = "lower", a = a, delta = delta)
+intervalUniroot(g, lower, upper, correction = "upper", a = a, delta = delta)
+uniroot(g, lower = lower, upper = upper, a = a, delta = delta)$root
 
 }

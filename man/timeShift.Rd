@@ -39,7 +39,7 @@ Return a vector of the same length as \code{x1} and \code{x2} representing the s
 Evaluate the time elapsed between two bounds (x1, x2) into a scaled domain given a rate model and condtions that represent its variables.
 }
 \details{
-Note that \code{x1} and the calculated \code{x2} must be in the time range provided by conditions. See the details section of \code{timescale} for the structure of \code{conditions} and \code{model}.
+Note that \code{x1} and the calculated \code{x2} must be in the time range provided by conditions. See the details section of \code{timescale} for the structure of \code{conditions} and \code{model} and the calculation.
 }
 \examples{
 #Setting entries
@@ -48,8 +48,6 @@ model <- "modelLinear"
 param = list(a = 1, T0 = 10)
 x1 = seq(1,10,length.out = 10)
 scaledPeriod = rep(10,10)
-control = list()
-inverse = FALSE
 
 #Calculating x2 time values
 x2 <- timeShift(x1, scaledPeriod = scaledPeriod, model = model, conditions = conditions, param = param)

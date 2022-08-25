@@ -9,7 +9,7 @@ interpolateCond(conditions, method)
 \arguments{
 \item{conditions}{\code{data.frame} with columns named \code{time} and variables expected to correspond to those of the model.}
 
-\item{method}{\code{character} corresponding to the name of the interpolating method. Available methods include \code{constant} and \code{linear}.}
+\item{method}{\code{character} corresponding to the name of the interpolating method. Available methods include \code{constant}, \code{linear} and \code{spline} (for natural cubic splines).}
 }
 \value{
 Return a list of functions that interpolate variable according to time. Functions have only \code{v} as an argument which represent the time vector at which the function is to be interpolated. The \code{names} attribute of the list correspond to the variable names.
@@ -22,12 +22,16 @@ The function is a wrapper of \code{approxfun}.
 }
 \examples{
 #Example of a call with two variables
-conditions <- data.frame(time = seq(0,30,length.out = 10), temp = rnorm(10, 10, 5), hr = rnorm(10, 10, 5))
-f <- interpolateCond(conditions, method = "linear")
+conditions <- data.frame(time = seq(0,30,length.out = 10), temp = rnorm(10, 10, 5), rh = rnorm(10, 10, 5))
+f <- interpolateCond(conditions, method = "constant")
 f
 #Plotting the result for temp 
 plot(conditions$time,conditions$temp)
 x <- seq(0,30,length.out = 100)
 lines(x,f$temp(x), lty = 1)
-
+f <- interpolateCond(conditions, method = "spline")
+#Plotting the result for temp 
+plot(conditions$time,conditions$temp)
+x <- seq(0,30,length.out = 100)
+lines(x,f$temp(x), lty = 1)
 }
